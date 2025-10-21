@@ -23,9 +23,16 @@ fi
 echo "Running MATLAB file: $ABSOLUTE_PATH"
 echo "----------------------------------------"
 
-# Run MATLAB in batch mode
-# Change 'matlab' to 'octave --eval' if you're using Octave instead
-matlab -batch "run('$ABSOLUTE_PATH')"
+# Check if file contains 'input(' for interactive mode
+if grep -q "input(" "$ABSOLUTE_PATH"; then
+    echo "Interactive mode detected (file uses input())"
+    # Run MATLAB in interactive mode without desktop GUI
+    matlab -nodesktop -nosplash -r "run('$ABSOLUTE_PATH'); exit;"
+else
+    echo "Batch mode"
+    # Run MATLAB in batch mode (non-interactive)
+    matlab -batch "run('$ABSOLUTE_PATH')"
+fi
 
-# Alternative for older MATLAB versions (uncomment if needed):
-# matlab -nodisplay -nosplash -nodesktop -r "run('$ABSOLUTE_PATH'); exit;"
+# Alternative for Octave (uncomment and comment above if using Octave):
+# octave --eval "run('$ABSOLUTE_PATH')"
