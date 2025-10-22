@@ -1,5 +1,5 @@
 % Script de Bisección
-format short;
+format long;
 
 try
     funcion = input('Ingrese la función para buscar una raíz: f(x) = ', 's');
@@ -31,15 +31,15 @@ try
             p = (a + b) / 2;
             fp = f(p);
             fa = f(a);
-
+            
             % Calcular error relativo
             if cont == 1
-                errorActual = inf; % Primera iteración siempre continúa
+                errorActual = inf;  % Primera iteración siempre continúa
             else
                 errorActual = abs(p - p_anterior) / abs(p);
             end
-
-            p_anterior = p; % Actualizar para la siguiente iteración
+            
+            p_anterior = p;  % Actualizar para la siguiente iteración
             signo = (fa * fp) <= 0;
             % Guardar valores de esta iteración
             iteraciones = [iteraciones; cont];

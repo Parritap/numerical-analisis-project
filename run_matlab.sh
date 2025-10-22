@@ -23,15 +23,20 @@ fi
 echo "Running MATLAB file: $ABSOLUTE_PATH"
 echo "----------------------------------------"
 
+# Get the directory and filename
+DIR_PATH="$(dirname "$ABSOLUTE_PATH")"
+FILE_NAME="$(basename "$ABSOLUTE_PATH" .m)"
+
 # Check if file contains 'input(' for interactive mode
 if grep -q "input(" "$ABSOLUTE_PATH"; then
     echo "Interactive mode detected (file uses input())"
     # Run MATLAB in interactive mode without desktop GUI
-    matlab -nodesktop -nosplash -r "run('$ABSOLUTE_PATH'); exit;"
+    # Add the directory to path and run the script
+    matlab -nodesktop -nosplash -r "cd('$DIR_PATH'); $FILE_NAME; exit;"
 else
     echo "Batch mode"
     # Run MATLAB in batch mode (non-interactive)
-    matlab -batch "run('$ABSOLUTE_PATH')"
+    matlab -batch "cd('$DIR_PATH'); $FILE_NAME;"
 fi
 
 # Alternative for Octave (uncomment and comment above if using Octave):
