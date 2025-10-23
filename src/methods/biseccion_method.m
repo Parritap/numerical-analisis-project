@@ -1,5 +1,9 @@
 % Script de Bisección
-format long;
+
+% ¿Cómo correr el script con bash rápidamente con el ejemplo visto en clase?
+% cd /Users/esteban/git-repos/numerical-analisis-project && echo -e "x^3 - 7*x^2 + 14*x - 6\n1\n3.2\n0.01" | ./run_matlab.sh src/methods/biseccion_method.m
+
+format short; % Displays in 4 decimals
 
 try
     funcion = input('Ingrese la función para buscar una raíz: f(x) = ', 's');
@@ -31,16 +35,19 @@ try
             p = (a + b) / 2;
             fp = f(p);
             fa = f(a);
-            
+
             % Calcular error relativo
             if cont == 1
-                errorActual = inf;  % Primera iteración siempre continúa
+                errorActual = inf; % Infinito para asegurarnos de entrar al ciclo en la primera iteración
             else
+                %El error depende de los puntos medios.
                 errorActual = abs(p - p_anterior) / abs(p);
             end
-            
-            p_anterior = p;  % Actualizar para la siguiente iteración
-            signo = (fa * fp) <= 0;
+
+            p_anterior = p; % Actualizar para la siguiente iteración
+            par_signos = {'-', '+'}
+            signo = par_signos{(fa * fp) <= 0};
+
             % Guardar valores de esta iteración
             iteraciones = [iteraciones; cont];
             valores_a = [valores_a; a];
@@ -60,6 +67,8 @@ try
 
         end
 
+        errores(1, 1) = 1;
+        error_porcentual(1, 1) = "100";
         p = (a + b) / 2;
 
         % Mostrar tabla de iteraciones
@@ -67,11 +76,12 @@ try
         disp('========== TABLA DE ITERACIONES ==========');
         fprintf('\n');
         fprintf('%3s | %12s | %12s | %12s | %12s | %12s | %6s | %12s | %12s\n', ...
-            'i', 'a', 'b', 'c', 'f(c)', 'f(a)', 'Signo?', 'Error', 'Error %');
+            'i', 'a', 'b', 'p', 'f(p)', 'f(a)', 'Signo?', 'Error', 'Error %');
         fprintf('----+-------------+--------------+--------------+--------------+--------------+--------+--------------+--------------\n');
 
+        % Para imprimir más decimales, simplemente cambiar el número que viene despues del punto en el fprintf del forloop.
         for k = 1:length(iteraciones)
-            fprintf('%3d | %12.8f | %12.8f | %12.8f | %12.8f | %12.8f | %6s | %12.8f | %12s\n', ...
+            fprintf('%3d | %12.4f | %12.4f | %12.4f | %12.4f | %12.4f | %6s | %12.4f | %12s\n', ...
                 iteraciones(k), valores_a(k), valores_b(k), valores_p(k), ...
                 valores_fc(k), valores_fa(k), ...
                 char(string(cambio_signo(k))), errores(k), char(error_porcentual(k)));

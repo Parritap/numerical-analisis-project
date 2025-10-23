@@ -1,166 +1,148 @@
-%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Template for a conference paper, prepared for the
-%% Food and Resource Economics Department - IFAS
-%% UNIVERSITY OF FLORIDA
-%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Version 1.0 // November 2019
-%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Ariel Soto-Caro
-%%  - asotocaro@ufl.edu
-%%  - arielsotocaro@gmail.com
-%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\documentclass[11pt]{article}
-\usepackage{UF_FRED_paper_style}
+\documentclass[12pt,a4paper]{article}
 
-\usepackage{lipsum}  %% Package to create dummy text (comment or erase before start)
+% Paquetes para el idioma español
+\usepackage[spanish,es-tabla]{babel}
 
-%% ===============================================
-%% Setting the line spacing (3 options: only pick one)
-% \doublespacing
-% \singlespacing
-\onehalfspacing
-%% ===============================================
+%% Configuración de fuente Arial
+%\usepackage{fontspec}
+%\setmainfont{Arial}
 
-\setlength{\droptitle}{-5em} %% Don't touch
+% Paquetes adicionales
+\usepackage{geometry}
+\usepackage{setspace}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{url}
+\usepackage{hyperref}
+\usepackage[authoryear,round]{natbib}
+\usepackage[table]{xcolor}
+\usepackage{colortbl}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{float}
 
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% SET THE TITLE
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Definir colores para tablas
+\definecolor{HeaderGreen}{RGB}{23,162,153}
+\definecolor{LightGreen}{RGB}{204,227,220}
 
-% TITLE:
-\title{Proyecto Final Análisis Numérico}
-
-% AUTHORS:
-\author{First Author\\% Name author
-    \href{mailto:juane.parrap@uqvirtual.edu.co}{\texttt{juane.parrap@uqvirtual.edu.co}} %% Email author 1 
-\and Second Author\\% Name author
-    \href{mailto:secondauthor@ufl.edu}{\texttt{davidc.rojasX@uqvirtual.edu.co}} %% Email author 2
-   }
-    
-% DATE:
-\date{\today}
-
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{document}
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% ABSTRACT
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-{\setstretch{.8}
-\maketitle
-% %%%%%%%%%%%%%%%%%%
-\begin{abstract}
-	% CONTENT OF ABS HERE--------------------------------------
-
-	This activity aims to employ various numerical methods and implement them within a numerical computing environment such as MATLAB. The objective is to address problems commonly encountered in the field of engineering, involving topics such as Taylor series, root-finding methods, regression, interpolation, and the application of Euler and Runge-Kutta methods for the numerical solution of differential equations.
-	By leveraging appropriate knowledge within the development environment, the intention is to test theoretical concepts through the resolution of practical problems frequently observed in professional settings.
-
-	% END CONTENT ABS------------------------------------------
-	\noindent
-	\textit{\textbf{Keywords: }%
-		Análisis numérico; Matlab; Computación numérica; Algoritmos.} \\ %% <-- Keywords HERE!
-	\noindent
-
-\end{abstract}
+% Configuración de natbib para español
+\providecommand{\andname}{and}
+\renewcommand{\andname}{y}
+\addto\captionsspanish{%
+  \renewcommand{\bibname}{Bibliograf\'ia}%
+  \renewcommand{\refname}{Referencias}%
 }
 
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% BODY OF THE DOCUMENT
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% --------------------
-\section{Introduction}
-% --------------------
-
-En esta actividad se desea utilizar varios métodos numéricos y aplicarlos en un sistema de cómputo numérico  “MATLAB”, buscando darle una solución a problemas que son comúnmente vistos en el ámbito de la ingeniería, donde se tratan temas como series de Taylor, métodos de búsqueda de raíces, regresión, interpolación y el uso de los métodos de Euler y Runge-Kutta para resoluciones numéricas de ecuaciones diferenciales.
-Mediante el uso de los conocimientos apropiados en el ambiente de desarrollo se planea poner en pruebas los conocimientos teóricos con problemas recurrentes en el área laboral.
 
 
-% --------------------
-\section{Methodology}
-% --------------------
 
-\lipsum[7-9] % Dummy text. Erase before write
-\citep{Chavas2015} % Example of citation. Erase before use
+% Configuración de márgenes
+\geometry{
+    left=2.5cm,
+    right=2.5cm,
+    top=2.5cm,
+    bottom=2.5cm
+}
 
-% --------------------
-\section{Results}
-% --------------------
 
-\lipsum[12-13] % Dummy text. Erase before write
+% Configuración de interlineado
+\onehalfspacing
 
-% --------------------
-\section{Discussion and Conclusions}
-% --------------------
+% Configuración de hipervínculos
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    citecolor=blue,
+    urlcolor=blue,
+    pdftitle={Título del Documento},
+    pdfauthor={Autor},
+    pdfsubject={Materia},
+    pdfkeywords={palabras clave}
+}
 
-\lipsum[14] % Dummy text. Erase before write
+% Información del documento
+\title{Métodos numéricos en Matlab}
+\author{Juan Esteban Parra Parra}
+\date{\today}
 
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% REFERENCES SECTION
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\medskip
 
-\bibliography{references.bib}
+\begin{document}
 
+
+% Página de título
+\begin{titlepage}
+	\centering
+
+
+	\vspace{2em}
+	{\textbf{Métodos numéricos en Matlab}}
+
+	{Profesor:}\\
+	\vspace{0.1cm}
+	{Edwin Romero Cuero}\\
+
+
+	\vspace{1.2cm}
+
+	% Logo centrado como primer elemento
+	\begin{center}
+		\includegraphics[width=0.4\textwidth]{resources/uniquindio.png}
+	\end{center}
+
+
+	\vspace{1.1cm}
+	% ####### PRESENTACION 
+	{\textbf{Presentado por:}}\\
+	\vspace{0.1cm}
+	{Juan Esteban Parra Parra}\\
+
+	\vfill{
+
+		\vspace{1cm}
+		\vspace{1cm}
+
+		{Universidad del Quindío --- Facultad de ingeniería\\Programa de Ingeniería de Sistemas y Computación}\\
+		\vspace{0.5cm}
+		{Armenia -- Quindío 2025 }
+
+
+
+	}
+
+\end{titlepage}
+
+% Tabla de contenidos
+\newpage
+\tableofcontents
 \newpage
 
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% TABLES
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Objetivo}
+Desarrollar e implementar funciones en MATLAB que apliquen los métodos numéricos vistos en clase para resolver problemas de ingeniería, enseñados en la asignatura Análisis numérico y que nos proporciona el docente Edwin Romero Cuero.
+\noindent
+Buscamos a través de esta actividad, fortalecer la comprensión de los distintos métodos de análisis aprendidos durante este semestre, a su vez comprender los errores de truncamiento, técnicas de búsqueda de raíces, regresiones, interpolación y ecuaciones diferenciales.
 
-\begin{table}[H]
-	\centering
-	\caption{Example table of descriptive statistics of the main variables.}
-	\label{tab:1}
-	\scalebox{.8}{
-		\begin{tabular}{rlrrrrrr}
-			\hline
-			\multicolumn{1}{c}{\textbf{Variables}} & \multicolumn{1}{c}{\textbf{Categories}} & \multicolumn{1}{c}{\textbf{Unit}} & \multicolumn{1}{c}{\textbf{Rep}} & \multicolumn{1}{c}{\textbf{Mean}} & \multicolumn{1}{c}{\textbf{St. Dev.}} & \multicolumn{1}{c}{\textbf{Min}} & \multicolumn{1}{c}{\textbf{Max}} \\ \hline \hline
+% Contenido principal del documento
+\section{Introducción}
 
-			\multicolumn{1}{l}{Variable 1}         & Category A                              & \multicolumn{1}{c}{\$}            & \multicolumn{1}{c}{8}            & 0                                 & 0                                     & 0                                & 0                                \\
-			                                       & Category B                              & \multicolumn{1}{c}{lb}            & \multicolumn{1}{c}{8}            & 22,411.20                         & 6,325.90                              & 13,819                           & 31,201                           \\
-			                                       & Category C                              & \multicolumn{1}{c}{\$}            & \multicolumn{1}{c}{8}            & 5,869.60                          & 4,609.90                              & -464.1                           & 12,744.10                        \\
-			\multicolumn{1}{l}{Variable 2}         & Category A                              & \multicolumn{1}{c}{\$}            & \multicolumn{1}{c}{8}            & 1,777.40                          & 144.5                                 & 1,642.30                         & 1,912.60                         \\
-			                                       & Category B                              & \multicolumn{1}{c}{lb}            & \multicolumn{1}{c}{8}            & 21,444.80                         & 5,146.90                              & 15,096                           & 28,032                           \\
-			                                       & Category C                              & \multicolumn{1}{c}{\$}            & \multicolumn{1}{c}{8}            & 4,138.50                          & 2,644.10                              & 22.2                             & 7,932.70                         \\
-			\multicolumn{1}{l}{Variable 3}         & Category A                              & \multicolumn{1}{c}{\$}            & \multicolumn{1}{c}{8}            & 2,346.80                          & 190.8                                 & 2,168.30                         & 2,525.20                         \\
-			                                       & Category B                              & \multicolumn{1}{c}{lb}            & \multicolumn{1}{c}{8}            & 18,343.30                         & 2,460.70                              & 15,269.00                        & 21,524.10                        \\
-			                                       & Category C                              & \multicolumn{1}{c}{\$}            & \multicolumn{1}{c}{8}            & 3,699.20                          & 2,549.80                              & 1,299.10                         & 8,709.80                         \\
-			\multicolumn{1}{l}{Variable 4}         & Category A                              & \multicolumn{1}{c}{\$}            & \multicolumn{1}{c}{8}            & 2,288.80                          & 186.1                                 & 2,114.80                         & 2,462.90                         \\
-			                                       & Category B                              & \multicolumn{1}{c}{lb}            & \multicolumn{1}{c}{8}            & 23,450.40                         & 4,172.50                              & 20,045.00                        & 32,363.00                        \\
-			                                       & Category C                              & \multicolumn{1}{c}{\$}            & \multicolumn{1}{c}{8}            & 6,619.80                          & 1,918.40                              & 4,479.70                         & 10,633.90                        \\
-			\hline
-			                                       & CASE \#1                                &                                   &                                  & 14                                & 6.61                                  & 6.9                              & 27.9                             \\
-			                                       & CASE \#2                                &                                   &                                  & 22.8                              & 7.73                                  & 10.2                             & 31.4                             \\
-			\hline
-		\end{tabular}}
-\end{table}%
+En esta actividad se desea utilizar varios métodos numéricos y aplicarlos en un sistema de cómputo numérico “MATLAB”, buscando darle una solución a problemas que son comúnmente vistos en el ámbito de la ingeniería, donde se tratan temas como series de Taylor, métodos de búsqueda de raíces, regresión, interpolación y el uso de los métodos de Euler y Runge-Kutta para resoluciones numéricas de ecuaciones diferenciales. Mediante el uso de los conocimientos apropiados en el ambiente de desarrollo se planea poner en pruebas los conocimientos teóricos con problemas recurrentes en el área laboral.
 
 
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% FIGURES
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
-% \begin{figure}[H]
-% 	\centering
-% 	\includegraphics[scale=.6]{figures/example_figure.png}
-% 	\caption{Example figure.}
-% 	\label{fig:1}
-% \end{figure}
-%
-% ==========================
-% ==========================
-% ==========================
+\section{Métodos para encontrar raices}
 
+\subsection{Bisección}
+
+Según \cite{wikipedia_biseccion}, el método de bisección, también llamado dicotomía, es un algoritmo de búsqueda de raíces que trabaja dividiendo el intervalo a la mitad y seleccionando el subintervalo que tiene la raíz.
+
+\section{Conclusiones}
+
+Conclusiones del trabajo.
+
+% Bibliografía
+\newpage
+
+\bibliographystyle{apalike-impure}
+\bibliography{references}
 
 \end{document}
