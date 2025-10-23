@@ -28,10 +28,26 @@ if subs(Df, xn) == 0
     error('La derivada en el punto inicial es cero. El método de Newton puede no converger.');
 end
 
+% Imprimir encabezado de la tabla
+fprintf('\n%s\n', repmat('=', 1, 90));
+fprintf('%-10s %-20s %-20s %-20s %-20s\n', 'Iter (i)', 'Error Absoluto', 'Error (%)', 'Xn', 'Xn+1');
+fprintf('%s\n', repmat('=', 1, 90));
+
 fa = vpa(subs(f, x, xn));
 fb = vpa(subs(Df, x, xn));
 xn2 = xn - fa / fb;
 Error = xn2 - xn;
+
+% Calcular error porcentual para la primera iteración
+if xn2 ~= 0
+    errorPorcentual = abs(Error / xn2) * 100;
+else
+    errorPorcentual = Inf;
+end
+
+% Imprimir primera iteración
+fprintf('%-10d %-20.10e %-20.10f %-20.10f %-20.10f\n', 1, abs(Error), errorPorcentual, double(xn), double(xn2));
+
 xn = xn2;
 i = 1;
 
@@ -46,14 +62,24 @@ while abs(Error) > errorEsperado
 
     xn2 = xn - fa / fb;
     Error = xn2 - xn;
-    xn = xn2;
+    
+    % Calcular error porcentual
+    if xn2 ~= 0
+        errorPorcentual = abs(Error / xn2) * 100;
+    else
+        errorPorcentual = Inf;
+    end
+    
     i = i + 1;
-
-    disp('Iteración:');
-    disp(i);
-    disp('La raíz de la función es:');
-    disp(xn2);
+    
+    % Imprimir iteración actual
+    fprintf('%-10d %-20.10e %-20.10f %-20.10f %-20.10f\n', i, abs(Error), errorPorcentual, double(xn), double(xn2));
+    
+    xn = xn2;
 end
+
+% Línea de cierre de la tabla
+fprintf('%s\n', repmat('=', 1, 90));
 
 % Resultado final
 fprintf('\nRaíz encontrada después de %d iteraciones: %.10f\n', i, double(xn2));
