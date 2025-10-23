@@ -1,7 +1,7 @@
 % Script de Bisección
 
 % ¿Cómo correr el script con bash rápidamente con el ejemplo visto en clase?
-% cd /Users/esteban/git-repos/numerical-analisis-project && echo -e "x^3 - 7*x^2 + 14*x - 6\n1\n3.2\n0.01" | ./run_matlab.sh src/methods/biseccion_method.m
+% cd /Users/esteban/git-repos/numerical-analisis-project && echo -e "x^3 - 7*x^2 + 14*x - 6\n1\n3.2\n0.01" | ./run_matlab.sh src/methods/raices/biseccion_method.m
 
 format short; % Displays in 4 decimals
 

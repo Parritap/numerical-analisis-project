@@ -3,7 +3,7 @@
 % Incluye validaciones para evitar divisiones por cero y muestra el resultado final y el error alcanzado.
 
 % Script para correr el archivo en Bash
-% cd /Users/esteban/git-repos/numerical-analisis-project && echo -e "x^3 - 7*x^2 + 14*x - 6\n1\n3.2\n0.01" | ./run_matlab.sh src/methods/netwon.m
+% cd /Users/esteban/git-repos/numerical-analisis-project && echo -e "x^3 - 7*x^2 + 14*x - 6\n1\n3.2\n0.01" | ./run_matlab.sh src/methods/raices/netwon.m
 
 format long;
 syms x;
