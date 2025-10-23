@@ -93,8 +93,10 @@ try
         disp('La cantidad de iteraciones fue:');
         disp(['i = ' num2str(cont)]);
         disp('La raíz en la función con el error esperado es:');
-        disp(['X = ' num2str(p, '%.10f')]);
-        disp(['f(X) = ' num2str(f(p), '%.10f')]);
+    disp(['X = ' num2str(p, '%.10f')]);
+    disp(['f(X) = ' num2str(f(p), '%.10f')]);
+    % Imprimir la forma final de la función en color verde
+    fprintf('\033[0;32mLa forma final es: f(x) = %s; raíz encontrada: x = %.10f\033[0m\n', funcion, p);
         ezplot(funcion); % Graficamos
         grid on;
     end
