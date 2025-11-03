@@ -127,7 +127,7 @@ La búsqueda de raíces es uno de los problemas fundamentales en análisis numé
 
 \subsection{Método de Bisección}
 
-Según \cite{wikipedia_biseccion}, el método de bisección, también llamado dicotomía, es un algoritmo de búsqueda de raíces que trabaja dividiendo el intervalo a la mitad y seleccionando el subintervalo que tiene la raíz.
+El método de bisección, también llamado dicotomía, es un algoritmo de búsqueda de raíces que trabaja dividiendo el intervalo a la mitad y seleccionando el subintervalo que tiene la raíz.
 
 \subsubsection{Fundamento teórico}
 
@@ -138,38 +138,38 @@ El método de bisección se basa en el Teorema del Valor Intermedio, el cual est
 El procedimiento del método de bisección es el siguiente:
 
 \begin{enumerate}
-    \item Se elige un intervalo inicial $[a, b]$ tal que $f(a) \cdot f(b) < 0$
-    \item Se calcula el punto medio: $c = \frac{a + b}{2}$
-    \item Se evalúa $f(c)$:
-    \begin{itemize}
-        \item Si $f(c) = 0$, entonces $c$ es la raíz exacta
-        \item Si $f(a) \cdot f(c) < 0$, la raíz está en $[a, c]$, por lo que $b = c$
-        \item Si $f(c) \cdot f(b) < 0$, la raíz está en $[c, b]$, por lo que $a = c$
-    \end{itemize}
-    \item Se repite el proceso hasta que $|b - a| < \epsilon$ o $|f(c)| < \epsilon$, donde $\epsilon$ es la tolerancia deseada
+	\item Se elige un intervalo inicial $[a, b]$ tal que $f(a) \cdot f(b) < 0$
+	\item Se calcula el punto medio: $c = \frac{a + b}{2}$
+	\item Se evalúa $f(c)$:
+	      \begin{itemize}
+		      \item Si $f(c) = 0$, entonces $c$ es la raíz exacta
+		      \item Si $f(a) \cdot f(c) < 0$, la raíz está en $[a, c]$, por lo que $b = c$
+		      \item Si $f(c) \cdot f(b) < 0$, la raíz está en $[c, b]$, por lo que $a = c$
+	      \end{itemize}
+	\item Se repite el proceso hasta que $|b - a| < \epsilon$ o $|f(c)| < \epsilon$, donde $\epsilon$ es la tolerancia deseada
 \end{enumerate}
 
 \subsubsection{Ventajas y desventajas}
 
 \textbf{Ventajas:}
 \begin{itemize}
-    \item Siempre converge si se cumple la condición inicial
-    \item Es simple de implementar
-    \item Garantiza encontrar una raíz si existe en el intervalo
+	\item Siempre converge si se cumple la condición inicial
+	\item Es simple de implementar
+	\item Garantiza encontrar una raíz si existe en el intervalo
 \end{itemize}
 
 \textbf{Desventajas:}
 \begin{itemize}
-    \item Convergencia lenta (lineal)
-    \item Requiere conocer un intervalo que contenga la raíz
-    \item No puede encontrar raíces múltiples fácilmente
+	\item Convergencia lenta (lineal)
+	\item Requiere conocer un intervalo que contenga la raíz
+	\item No puede encontrar raíces múltiples fácilmente
 \end{itemize}
 
 \subsubsection{Error y convergencia}
 
 El error absoluto después de $n$ iteraciones está acotado por:
 \begin{equation}
-    |e_n| \leq \frac{b - a}{2^n}
+	|e_n| \leq \frac{b - a}{2^n}
 \end{equation}
 
 donde $b - a$ es la longitud del intervalo inicial.
@@ -186,7 +186,7 @@ El método se basa en la aproximación lineal de la función mediante su serie d
 
 La fórmula de Newton-Raphson es:
 \begin{equation}
-    x_{n+1} = x_n - \frac{f(x_n)}{f'(x_n)}
+	x_{n+1} = x_n - \frac{f(x_n)}{f'(x_n)}
 \end{equation}
 
 Geométricamente, esto representa extender la tangente a la curva en el punto $(x_n, f(x_n))$ hasta que intersecte el eje $x$.
@@ -194,38 +194,38 @@ Geométricamente, esto representa extender la tangente a la curva en el punto $(
 \subsubsection{Algoritmo}
 
 \begin{enumerate}
-    \item Elegir un valor inicial $x_0$ cercano a la raíz esperada
-    \item Calcular $f(x_n)$ y $f'(x_n)$
-    \item Verificar que $f'(x_n) \neq 0$
-    \item Calcular la siguiente aproximación: $x_{n+1} = x_n - \frac{f(x_n)}{f'(x_n)}$
-    \item Verificar el criterio de convergencia: $|x_{n+1} - x_n| < \epsilon$ o $|f(x_{n+1})| < \epsilon$
-    \item Si no se cumple el criterio, repetir desde el paso 2
+	\item Elegir un valor inicial $x_0$ cercano a la raíz esperada
+	\item Calcular $f(x_n)$ y $f'(x_n)$
+	\item Verificar que $f'(x_n) \neq 0$
+	\item Calcular la siguiente aproximación: $x_{n+1} = x_n - \frac{f(x_n)}{f'(x_n)}$
+	\item Verificar el criterio de convergencia: $|x_{n+1} - x_n| < \epsilon$ o $|f(x_{n+1})| < \epsilon$
+	\item Si no se cumple el criterio, repetir desde el paso 2
 \end{enumerate}
 
 \subsubsection{Ventajas y desventajas}
 
 \textbf{Ventajas:}
 \begin{itemize}
-    \item Convergencia cuadrática cuando se está cerca de la raíz
-    \item Requiere menos iteraciones que bisección
-    \item Muy preciso cuando converge
+	\item Convergencia cuadrática cuando se está cerca de la raíz
+	\item Requiere menos iteraciones que bisección
+	\item Muy preciso cuando converge
 \end{itemize}
 
 \textbf{Desventajas:}
 \begin{itemize}
-    \item Requiere calcular la derivada $f'(x)$
-    \item No garantiza convergencia si la elección inicial es mala
-    \item Puede diverger o ciclar si $f'(x)$ es muy pequeña
-    \item Sensible a la elección del punto inicial
+	\item Requiere calcular la derivada $f'(x)$
+	\item No garantiza convergencia si la elección inicial es mala
+	\item Puede diverger o ciclar si $f'(x)$ es muy pequeña
+	\item Sensible a la elección del punto inicial
 \end{itemize}
 
 \subsubsection{Condiciones de convergencia}
 
 El método converge si:
 \begin{itemize}
-    \item La función es continuamente diferenciable
-    \item La derivada no se anula en la vecindad de la raíz
-    \item El valor inicial $x_0$ está suficientemente cerca de la raíz
+	\item La función es continuamente diferenciable
+	\item La derivada no se anula en la vecindad de la raíz
+	\item El valor inicial $x_0$ está suficientemente cerca de la raíz
 \end{itemize}
 
 \subsection{Método de la Secante}
@@ -233,7 +233,7 @@ El método converge si:
 El método de la secante es una variación del método de Newton-Raphson que no requiere calcular la derivada. En su lugar, aproxima la derivada usando dos puntos anteriores:
 
 \begin{equation}
-    x_{n+1} = x_n - f(x_n) \frac{x_n - x_{n-1}}{f(x_n) - f(x_{n-1})}
+	x_{n+1} = x_n - f(x_n) \frac{x_n - x_{n-1}}{f(x_n) - f(x_{n-1})}
 \end{equation}
 
 Este método tiene convergencia superlineal (orden aproximadamente 1.618) y es útil cuando el cálculo de la derivada es costoso o difícil.
@@ -250,12 +250,12 @@ La regresión lineal permite encontrar la recta que mejor se ajusta a un conjunt
 
 Dado un conjunto de $n$ puntos $(x_i, y_i)$, se busca una recta de la forma:
 \begin{equation}
-    y = ax + b
+	y = ax + b
 \end{equation}
 
 que minimice la suma de los errores cuadráticos:
 \begin{equation}
-    S = \sum_{i=1}^{n} (y_i - ax_i - b)^2
+	S = \sum_{i=1}^{n} (y_i - ax_i - b)^2
 \end{equation}
 
 \subsubsection{Método de mínimos cuadrados}
@@ -263,21 +263,21 @@ que minimice la suma de los errores cuadráticos:
 Para minimizar $S$, se calculan las derivadas parciales con respecto a $a$ y $b$ y se igualan a cero:
 
 \begin{equation}
-    \frac{\partial S}{\partial a} = 0, \quad \frac{\partial S}{\partial b} = 0
+	\frac{\partial S}{\partial a} = 0, \quad \frac{\partial S}{\partial b} = 0
 \end{equation}
 
 Esto lleva al sistema de ecuaciones normales:
 
 \begin{align}
-    a\sum_{i=1}^{n} x_i^2 + b\sum_{i=1}^{n} x_i &= \sum_{i=1}^{n} x_i y_i \\
-    a\sum_{i=1}^{n} x_i + bn &= \sum_{i=1}^{n} y_i
+	a\sum_{i=1}^{n} x_i^2 + b\sum_{i=1}^{n} x_i & = \sum_{i=1}^{n} x_i y_i \\
+	a\sum_{i=1}^{n} x_i + bn                    & = \sum_{i=1}^{n} y_i
 \end{align}
 
 Las soluciones son:
 
 \begin{align}
-    a &= \frac{n\sum x_i y_i - \sum x_i \sum y_i}{n\sum x_i^2 - (\sum x_i)^2} \\
-    b &= \frac{\sum y_i - a\sum x_i}{n}
+	a & = \frac{n\sum x_i y_i - \sum x_i \sum y_i}{n\sum x_i^2 - (\sum x_i)^2} \\
+	b & = \frac{\sum y_i - a\sum x_i}{n}
 \end{align}
 
 \subsubsection{Coeficiente de determinación}
@@ -285,7 +285,7 @@ Las soluciones son:
 La calidad del ajuste se mide mediante el coeficiente de determinación $R^2$:
 
 \begin{equation}
-    R^2 = 1 - \frac{\sum_{i=1}^{n}(y_i - \hat{y}_i)^2}{\sum_{i=1}^{n}(y_i - \bar{y})^2}
+	R^2 = 1 - \frac{\sum_{i=1}^{n}(y_i - \hat{y}_i)^2}{\sum_{i=1}^{n}(y_i - \bar{y})^2}
 \end{equation}
 
 donde $\hat{y}_i$ son los valores predichos y $\bar{y}$ es la media de los valores observados. Un valor de $R^2$ cercano a 1 indica un buen ajuste.
@@ -294,10 +294,10 @@ donde $\hat{y}_i$ son los valores predichos y $\bar{y}$ es la media de los valor
 
 La regresión lineal se utiliza en:
 \begin{itemize}
-    \item Análisis de tendencias económicas
-    \item Calibración de instrumentos de medición
-    \item Predicción de comportamientos lineales
-    \item Análisis de correlación entre variables
+	\item Análisis de tendencias económicas
+	\item Calibración de instrumentos de medición
+	\item Predicción de comportamientos lineales
+	\item Análisis de correlación entre variables
 \end{itemize}
 
 \subsection{Regresión cuadrática}
@@ -308,12 +308,12 @@ La regresión cuadrática ajusta un polinomio de segundo grado a un conjunto de 
 
 Para un conjunto de $n$ puntos $(x_i, y_i)$, se busca un polinomio de la forma:
 \begin{equation}
-    y = ax^2 + bx + c
+	y = ax^2 + bx + c
 \end{equation}
 
 que minimice la suma de errores cuadráticos:
 \begin{equation}
-    S = \sum_{i=1}^{n} (y_i - ax_i^2 - bx_i - c)^2
+	S = \sum_{i=1}^{n} (y_i - ax_i^2 - bx_i - c)^2
 \end{equation}
 
 \subsubsection{Sistema de ecuaciones normales}
@@ -321,9 +321,9 @@ que minimice la suma de errores cuadráticos:
 Aplicando el criterio de mínimos cuadrados, se obtiene el sistema:
 
 \begin{align}
-    a\sum x_i^4 + b\sum x_i^3 + c\sum x_i^2 &= \sum x_i^2 y_i \\
-    a\sum x_i^3 + b\sum x_i^2 + c\sum x_i &= \sum x_i y_i \\
-    a\sum x_i^2 + b\sum x_i + cn &= \sum y_i
+	a\sum x_i^4 + b\sum x_i^3 + c\sum x_i^2 & = \sum x_i^2 y_i \\
+	a\sum x_i^3 + b\sum x_i^2 + c\sum x_i   & = \sum x_i y_i   \\
+	a\sum x_i^2 + b\sum x_i + cn            & = \sum y_i
 \end{align}
 
 Este sistema lineal de tres ecuaciones con tres incógnitas puede resolverse mediante métodos matriciales.
@@ -333,13 +333,13 @@ Este sistema lineal de tres ecuaciones con tres incógnitas puede resolverse med
 El sistema puede expresarse como $A\mathbf{x} = \mathbf{b}$, donde:
 
 \begin{equation}
-    A = \begin{bmatrix}
-        \sum x_i^4 & \sum x_i^3 & \sum x_i^2 \\
-        \sum x_i^3 & \sum x_i^2 & \sum x_i \\
-        \sum x_i^2 & \sum x_i & n
-    \end{bmatrix}, \quad
-    \mathbf{x} = \begin{bmatrix} a \\ b \\ c \end{bmatrix}, \quad
-    \mathbf{b} = \begin{bmatrix} \sum x_i^2 y_i \\ \sum x_i y_i \\ \sum y_i \end{bmatrix}
+	A = \begin{bmatrix}
+		\sum x_i^4 & \sum x_i^3 & \sum x_i^2 \\
+		\sum x_i^3 & \sum x_i^2 & \sum x_i   \\
+		\sum x_i^2 & \sum x_i   & n
+	\end{bmatrix}, \quad
+	\mathbf{x} = \begin{bmatrix} a \\ b \\ c \end{bmatrix}, \quad
+	\mathbf{b} = \begin{bmatrix} \sum x_i^2 y_i \\ \sum x_i y_i \\ \sum y_i \end{bmatrix}
 \end{equation}
 
 \subsubsection{Implementación en MATLAB}
@@ -357,26 +357,26 @@ donde \texttt{p} contiene los coeficientes $[a, b, c]$ del polinomio $ax^2 + bx 
 
 La regresión cuadrática es útil para modelar:
 \begin{itemize}
-    \item Trayectorias parabólicas en física
-    \item Relaciones de costo-beneficio en economía
-    \item Curvas de rendimiento en ingeniería
-    \item Fenómenos con puntos de inflexión o extremos
+	\item Trayectorias parabólicas en física
+	\item Relaciones de costo-beneficio en economía
+	\item Curvas de rendimiento en ingeniería
+	\item Fenómenos con puntos de inflexión o extremos
 \end{itemize}
 
 \subsubsection{Consideraciones importantes}
 
 \begin{itemize}
-    \item Se requieren \textbf{al menos 3 puntos} para determinar un polinomio cuadrático
-    \item Con exactamente 3 puntos no colineales, el polinomio pasa exactamente por todos los puntos
-    \item Con más de 3 puntos, se obtiene un ajuste de mínimos cuadrados que minimiza el error global
-    \item La regresión cuadrática es apropiada cuando los datos muestran curvatura, pero no oscilaciones múltiples
+	\item Se requieren \textbf{al menos 3 puntos} para determinar un polinomio cuadrático
+	\item Con exactamente 3 puntos no colineales, el polinomio pasa exactamente por todos los puntos
+	\item Con más de 3 puntos, se obtiene un ajuste de mínimos cuadrados que minimiza el error global
+	\item La regresión cuadrática es apropiada cuando los datos muestran curvatura, pero no oscilaciones múltiples
 \end{itemize}
 
 \subsection{Regresión polinomial de orden superior}
 
 Generalización del concepto a polinomios de grado $n$:
 \begin{equation}
-    y = a_n x^n + a_{n-1} x^{n-1} + \cdots + a_1 x + a_0
+	y = a_n x^n + a_{n-1} x^{n-1} + \cdots + a_1 x + a_0
 \end{equation}
 
 Se requieren al menos $n+1$ puntos para ajustar un polinomio de grado $n$. Sin embargo, usar polinomios de grado muy alto puede llevar a sobreajuste (overfitting).
@@ -390,60 +390,36 @@ La interpolación es el proceso de estimar valores de una función en puntos int
 El polinomio interpolador de Lagrange de grado $n$ que pasa por $n+1$ puntos $(x_0, y_0), \ldots, (x_n, y_n)$ es:
 
 \begin{equation}
-    P_n(x) = \sum_{i=0}^{n} y_i L_i(x)
+	P_n(x) = \sum_{i=0}^{n} y_i L_i(x)
 \end{equation}
 
 donde los polinomios base de Lagrange son:
 
 \begin{equation}
-    L_i(x) = \prod_{\substack{j=0\\j\neq i}}^{n} \frac{x - x_j}{x_i - x_j}
+	L_i(x) = \prod_{\substack{j=0\\j\neq i}}^{n} \frac{x - x_j}{x_i - x_j}
 \end{equation}
 
 \subsection{Interpolación de Newton}
 
 Utiliza diferencias divididas para construir el polinomio interpolador de forma más eficiente que Lagrange.
 
-\section{Métodos para ecuaciones diferenciales}
-
-\subsection{Método de Euler}
-
-El método de Euler es el más simple para resolver numéricamente ecuaciones diferenciales ordinarias de primer orden $y' = f(t, y)$ con condición inicial $y(t_0) = y_0$.
-
-La fórmula iterativa es:
-\begin{equation}
-    y_{n+1} = y_n + h \cdot f(t_n, y_n)
-\end{equation}
-
-donde $h$ es el tamaño del paso.
-
-\subsection{Métodos de Runge-Kutta}
-
-Los métodos de Runge-Kutta son una familia de métodos iterativos más precisos que Euler. El método de Runge-Kutta de cuarto orden (RK4) es especialmente popular:
-
-\begin{align}
-    k_1 &= h \cdot f(t_n, y_n) \\
-    k_2 &= h \cdot f(t_n + h/2, y_n + k_1/2) \\
-    k_3 &= h \cdot f(t_n + h/2, y_n + k_2/2) \\
-    k_4 &= h \cdot f(t_n + h, y_n + k_3) \\
-    y_{n+1} &= y_n + \frac{1}{6}(k_1 + 2k_2 + 2k_3 + k_4)
-\end{align}
 
 \section{Conclusiones}
 
 A través de este trabajo se han estudiado e implementado diversos métodos numéricos fundamentales en ingeniería. Las principales conclusiones son:
 
 \begin{enumerate}
-    \item Los métodos de búsqueda de raíces como bisección y Newton-Raphson ofrecen diferentes compromisos entre garantía de convergencia y velocidad. Bisección es robusto pero lento, mientras que Newton-Raphson es rápido pero requiere buenas condiciones iniciales.
-    
-    \item Las técnicas de ajuste de curvas (regresión lineal y cuadrática) son herramientas poderosas para modelar datos experimentales y encontrar relaciones matemáticas entre variables. La elección entre regresión lineal y cuadrática depende de la naturaleza de los datos y del fenómeno estudiado.
-    
-    \item MATLAB proporciona funciones integradas como \texttt{polyfit} y \texttt{polyval} que simplifican considerablemente la implementación de estos métodos, permitiendo al ingeniero concentrarse en la interpretación de resultados más que en los detalles algorítmicos.
-    
-    \item La validación de datos de entrada es crucial en cualquier implementación numérica, como se evidenció en el código de regresión cuadrática donde se verifica que el número de puntos sea suficiente y de tipo correcto.
-    
-    \item Los métodos numéricos son indispensables en la práctica ingenieril moderna, ya que permiten resolver problemas que no tienen solución analítica o cuya solución analítica es extremadamente compleja.
-    
-    \item La visualización gráfica de los resultados es fundamental para validar los métodos y comunicar los hallazgos de manera efectiva.
+	\item Los métodos de búsqueda de raíces como bisección y Newton-Raphson ofrecen diferentes compromisos entre garantía de convergencia y velocidad. Bisección es robusto pero lento, mientras que Newton-Raphson es rápido pero requiere buenas condiciones iniciales.
+
+	\item Las técnicas de ajuste de curvas (regresión lineal y cuadrática) son herramientas poderosas para modelar datos experimentales y encontrar relaciones matemáticas entre variables. La elección entre regresión lineal y cuadrática depende de la naturaleza de los datos y del fenómeno estudiado.
+
+	\item MATLAB proporciona funciones integradas como \texttt{polyfit} y \texttt{polyval} que simplifican considerablemente la implementación de estos métodos, permitiendo al ingeniero concentrarse en la interpretación de resultados más que en los detalles algorítmicos.
+
+	\item La validación de datos de entrada es crucial en cualquier implementación numérica, como se evidenció en el código de regresión cuadrática donde se verifica que el número de puntos sea suficiente y de tipo correcto.
+
+	\item Los métodos numéricos son indispensables en la práctica ingenieril moderna, ya que permiten resolver problemas que no tienen solución analítica o cuya solución analítica es extremadamente compleja.
+
+	\item La visualización gráfica de los resultados es fundamental para validar los métodos y comunicar los hallazgos de manera efectiva.
 \end{enumerate}
 
 % Bibliografía
