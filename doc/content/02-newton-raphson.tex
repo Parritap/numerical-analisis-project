@@ -8,6 +8,7 @@ El método se basa en la aproximación lineal de la función mediante su serie d
 
 \begin{figure}[h]
 	\centering
+	\shorthandoff{<>}
 	\begin{tikzpicture}[scale=1.2]
 		% Axes
 		\draw[->, thick] (-0.5,0) -- (5,0) node[right] {$x$};
@@ -36,21 +37,22 @@ El método se basa en la aproximación lineal de la función mediante su serie d
 		\pgfmathsetmacro{\slopethree}{2*(\xthree-2)}
 		\pgfmathsetmacro{\xfour}{\xthree - \ythree/\slopethree}  % x4
 
-		% Root r (approximately at x=1)
-		\def\xroot{1}
+		% Root r (approximately at x=3, the right root)
+		\def\xroot{3}
+		\pgfmathsetmacro{\yroot}{(\xroot-2)*(\xroot-2) - 1}
 
 		% Plot points on curve
 		\fill[cyan] (\xone,\yone) circle (3pt);
 		\fill[cyan] (\xtwo,\ytwo) circle (3pt);
-		\fill[cyan] (\xroot,0) circle (3pt);
+		\fill[red] (\xroot,\yroot) circle (3pt);
 
 		% Tangent lines (magenta) - properly calculated
 		% Tangent at x1: y - f(x1) = f'(x1)(x - x1)
 		% Rearranged: y = f'(x1)*x + (f(x1) - f'(x1)*x1)
-		\draw[magenta, thick, domain=2.5:4.5] plot (\x, {\slopeone*(\x - \xone) + \yone});
+		\draw[magenta, thick, domain=2.8:4.5] plot (\x, {\slopeone*(\x - \xone) + \yone});
 
 		% Tangent at x2
-		\draw[magenta, thick, domain=1.8:3.8] plot (\x, {\slopetwo*(\x - \xtwo) + \ytwo});
+		\draw[magenta, thick, domain=2.8:3.8] plot (\x, {\slopetwo*(\x - \xtwo) + \ytwo});
 
 		% Vertical dashed lines
 		\draw[gray, dashed] (\xone,0) -- (\xone,\yone);
@@ -59,15 +61,15 @@ El método se basa en la aproximación lineal de la función mediante su serie d
 		% Labels for points
 		\node[above right] at (\xone,\yone) {$(x_1, f(x_1))$};
 		\node[above left] at (\xtwo,\ytwo) {$(x_2, f(x_2))$};
-		\node[above left] at (\xroot,0.2) {$r$};
+		\node[above] at (\xroot,0.3) {$r$};
 
-		% Labels on x-axis
-		\node[below] at (\xfour,-0.1) {$x_4$};
-		\node[below] at (\xthree,-0.1) {$x_3$};
+		% Labels on x-axis (with adjusted positions to avoid overlap)
+		\node[below] at (\xthree,-0.35) {$x_3$};
 		\node[below] at (\xtwo,-0.1) {$x_2$};
 		\node[below] at (\xone,-0.1) {$x_1$};
 
 	\end{tikzpicture}
+	\shorthandon{<>}
 	\caption{Visualización del método de Newton-Raphson}
 \end{figure}
 
