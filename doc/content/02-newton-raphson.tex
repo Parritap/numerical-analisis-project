@@ -4,7 +4,7 @@ El método de Newton-Raphson es un algoritmo iterativo para encontrar raíces de
 
 \subsubsection{Fundamento teórico}
 
-El método se basa en la aproximación lineal de la función mediante su serie de Taylor. Si $x_n$ es una aproximación a la raíz, entonces la siguiente aproximación $x_{n+1}$ se obtiene encontrando donde la línea tangente a la curva en el punto $(x_n, f(x_n))$ cruza el eje $x$.
+En el trabajo de \cite{Stewart2012_Una} se presenta la interpretación geométrica del método de Newton. Como se observa en la figura \ref{plot-newton-raphson}, $r$ representa la raíz que buscamos encontrar. El proceso comienza con una primera aproximación $x_1$, que puede obtenerse mediante suposición, a partir de un esbozo de la gráfica de $f$, o mediante un graficador. Se considera la recta tangente $L$ a la curva $y = f(x)$ en el punto $(x_1, f(x_1))$ y se determina su intersección con el eje $x$, la cual se etiqueta como $x_2$. La idea fundamental del método de Newton radica en que la recta tangente aproxima localmente a la curva, por lo que su intersección $x_2$ está próxima a la raíz $r$ buscada. Dado que la tangente es una recta, su intersección con el eje $x$ puede calcularse de manera directa.
 
 \begin{figure}[h]
 	\centering
@@ -71,6 +71,7 @@ El método se basa en la aproximación lineal de la función mediante su serie d
 	\end{tikzpicture}
 	\shorthandon{<>}
 	\caption{Visualización del método de Newton-Raphson}
+	\label{plot-newton-raphson}
 \end{figure}
 
 \subsubsection{Fórmula iterativa}
@@ -93,28 +94,71 @@ Geométricamente, esto representa extender la tangente a la curva en el punto $(
 	\item Si no se cumple el criterio, repetir desde el paso 2
 \end{enumerate}
 
-\subsubsection{Ventajas y desventajas}
 
-\textbf{Ventajas:}
-\begin{itemize}
-	\item Convergencia cuadrática cuando se está cerca de la raíz
-	\item Requiere menos iteraciones que bisección
-	\item Muy preciso cuando converge
-\end{itemize}
+\subsection{Código matlab}
 
-\textbf{Desventajas:}
-\begin{itemize}
-	\item Requiere calcular la derivada $f'(x)$
-	\item No garantiza convergencia si la elección inicial es mala
-	\item Puede diverger o ciclar si $f'(x)$ es muy pequeña
-	\item Sensible a la elección del punto inicial
-\end{itemize}
-
-\subsubsection{Condiciones de convergencia}
-
-El método converge si:
-\begin{itemize}
-	\item La función es continuamente diferenciable
-	\item La derivada no se anula en la vecindad de la raíz
-	\item El valor inicial $x_0$ está suficientemente cerca de la raíz
-\end{itemize}
+\begin{lstlisting}
+format long;
+syms x;
+f_str = input('Ingrese la funcion para buscar una raiz: f(x) = ', 's');
+f = str2sym(f_str);
+a = input('Ingrese el valor inicial del intervalo: a = ');
+b = input('Ingrese el valor final del intervalo: b = ');
+if subs(f, x, a) * subs(f, x, b) > 0
+    error('La funcion no corta el eje x en el intervalo dado.');
+end
+xn = (a + b) / 2;
+errorEsperado = input('Ingrese el error requerido en decimales: E = ');
+% Validacion de que la derivada no sea cero en el punto inicial
+Df = diff(f, x);
+if subs(Df, xn) == 0
+    error('La derivada en el punto inicial es cero. El metodo de Newton puede no converger.');
+end
+% Imprimir encabezado de la tabla
+fprintf('\n%s\n', repmat('=', 1, 90));
+fprintf('%-10s %-20s %-20s %-20s %-20s\n', 'Iter (i)', 'Error Absoluto', 'Error (%)', 'Xn', 'Xn+1');
+fprintf('%s\n', repmat('=', 1, 90));
+fa = vpa(subs(f, x, xn));
+fb = vpa(subs(Df, x, xn));
+xn2 = xn - fa / fb;
+Error = xn2 - xn;
+% Calcular error porcentual para la primera iteracion
+if xn2 ~= 0
+    errorPorcentual = abs(Error / xn2) * 100;
+else
+    errorPorcentual = Inf;
+end
+% Imprimir primera iteracion
+fprintf('%-10d %-20.10e %-20.10f %-20.10f %-20.10f\n', 1, abs(Error), errorPorcentual, double(xn), double(xn2));
+xn = xn2;
+i = 1;
+while abs(Error) > errorEsperado
+    fa = vpa(subs(f, x, xn));
+    fb = vpa(subs(Df, x, xn));
+    % Verificar que la derivada no sea cero antes de dividir
+    if fb == 0
+        error('La derivada es cero en la iteracion %d. El metodo no puede continuar.', i);
+    end
+    xn2 = xn - fa / fb;
+    Error = xn2 - xn;
+    
+    % Calcular error porcentual
+    if xn2 ~= 0
+        errorPorcentual = abs(Error / xn2) * 100;
+    else
+        errorPorcentual = Inf;
+    end
+    
+    i = i + 1;
+    
+    % Imprimir iteracion actual
+    fprintf('%-10d %-20.10e %-20.10f %-20.10f %-20.10f\n', i, abs(Error), errorPorcentual, double(xn), double(xn2));
+    
+    xn = xn2;
+end
+% Linea de cierre de la tabla
+fprintf('%s\n', repmat('=', 1, 90));
+% Resultado final
+fprintf('\nRaiz encontrada despues de %d iteraciones: %.10f\n', i, double(xn2));
+fprintf('Error final: %.10e\n', abs(Error)); 
+\end{lstlisting}
