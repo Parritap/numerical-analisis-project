@@ -1,0 +1,59 @@
+\subsection{Método de Newton-Raphson}
+
+El método de Newton-Raphson es un algoritmo iterativo para encontrar raíces de funciones reales. Utiliza la derivada de la función para aproximar la raíz a partir de un valor inicial \cite{newtons-method}. Según \cite{newton-optimization} el método de Newton es una de las herramientas fundamentales en análisis numérico, investigación de operaciones, optimización y control. Tiene numerosas aplicaciones en la ciencia de la administración, la investigación industrial y financiera, y la minería de datos.
+
+\subsubsection{Fundamento teórico}
+
+El método se basa en la aproximación lineal de la función mediante su serie de Taylor. Si $x_n$ es una aproximación a la raíz, entonces la siguiente aproximación $x_{n+1}$ se obtiene encontrando donde la línea tangente a la curva en el punto $(x_n, f(x_n))$ cruza el eje $x$.
+
+\begin{figure}
+	\centering
+	\includegraphics[scale=0.4]{resources/newton-root-plot.png}
+\end{figure}
+
+\subsubsection{Fórmula iterativa}
+
+La fórmula de Newton-Raphson es:
+\begin{equation}
+	x_{n+1} = x_n - \frac{f(x_n)}{f'(x_n)}
+\end{equation}
+
+Geométricamente, esto representa extender la tangente a la curva en el punto $(x_n, f(x_n))$ hasta que intersecte el eje $x$.
+
+\subsubsection{Algoritmo}
+
+\begin{enumerate}
+	\item Elegir un valor inicial $x_0$ cercano a la raíz esperada
+	\item Calcular $f(x_n)$ y $f'(x_n)$
+	\item Verificar que $f'(x_n) \neq 0$
+	\item Calcular la siguiente aproximación: $x_{n+1} = x_n - \frac{f(x_n)}{f'(x_n)}$
+	\item Verificar el criterio de convergencia: $|x_{n+1} - x_n| < \epsilon$ o $|f(x_{n+1})| < \epsilon$
+	\item Si no se cumple el criterio, repetir desde el paso 2
+\end{enumerate}
+
+\subsubsection{Ventajas y desventajas}
+
+\textbf{Ventajas:}
+\begin{itemize}
+	\item Convergencia cuadrática cuando se está cerca de la raíz
+	\item Requiere menos iteraciones que bisección
+	\item Muy preciso cuando converge
+\end{itemize}
+
+\textbf{Desventajas:}
+\begin{itemize}
+	\item Requiere calcular la derivada $f'(x)$
+	\item No garantiza convergencia si la elección inicial es mala
+	\item Puede diverger o ciclar si $f'(x)$ es muy pequeña
+	\item Sensible a la elección del punto inicial
+\end{itemize}
+
+\subsubsection{Condiciones de convergencia}
+
+El método converge si:
+\begin{itemize}
+	\item La función es continuamente diferenciable
+	\item La derivada no se anula en la vecindad de la raíz
+	\item El valor inicial $x_0$ está suficientemente cerca de la raíz
+\end{itemize}
+
