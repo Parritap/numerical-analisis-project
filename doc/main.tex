@@ -22,9 +22,31 @@
 \usepackage{array}
 \usepackage{longtable}
 \usepackage{float}
+\usepackage{caption}
 \usepackage{listings}
 \usepackage{algorithm}
 \usepackage{algpseudocode}
+
+% Lset config for Matlab code
+\lstset{
+    language=Matlab,
+    basicstyle=\small\ttfamily,
+    keywordstyle=\color{blue}\bfseries,
+    commentstyle=\color{green!60!black}\itshape,
+    stringstyle=\color{red},
+    numberstyle=\tiny\color{gray},
+    numbers=left,
+    numbersep=8pt,
+    stepnumber=1,
+    frame=single,
+    breaklines=true,
+    breakatwhitespace=true,
+    tabsize=4,
+    showstringspaces=false,
+    xleftmargin=15pt,
+    xrightmargin=5pt,
+    backgroundcolor=\color{gray!5}
+}
 
 % Definir colores para tablas
 \definecolor{HeaderGreen}{RGB}{23,162,153}
@@ -61,6 +83,11 @@
     pdfkeywords={métodos numéricos, MATLAB, raíces, regresión}
 }
 
+% Elimina el espacio al inicio de cada párrafo
+\setlength{\parindent}{0pt}
+% Separa los parrafos ya que no existe espacio al inicio de cada párrafo
+\setlength{\parskip}{8pt}
+
 % Información del documento
 \title{Métodos numéricos en Matlab}
 \author{Juan Esteban Parra Parra}
@@ -87,7 +114,7 @@
 	\end{center}
 
 	\vspace{1.1cm}
-	% ####### PRESENTACION 
+	% ####### PRESENTACION
 	{\textbf{Presentado por:}}\\
 	\vspace{0.1cm}
 	{Juan Esteban Parra Parra}\\
@@ -109,4 +136,18 @@
 \newpage
 
 
-\input{content}
+% ##########################################################################
+% ##########################   CONTENIDO ###################################
+% ##########################################################################
+
+\input{preambulo}
+
+\input{content/biseccion}
+
+
+% Bibliografía
+\newpage
+\bibliographystyle{apalike-impure}
+\bibliography{references.bib}
+
+\end{document}

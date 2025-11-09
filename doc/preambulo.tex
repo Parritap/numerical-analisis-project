@@ -18,55 +18,18 @@ Los métodos numéricos constituyen técnicas mediante las cuales es posible for
 
 La búsqueda de raíces es uno de los problemas fundamentales en análisis numérico. Según \cite{Delic2026} la raíz de una función de una variable es el valor del argumento para el cual la función tiene un valor de cero. Estos valores también se conocen como ceros de la función. La importancia de encontrar raíces radica en que muchos problemas de ingeniería pueden reducirse a la solución de ecuaciones de la forma $f(x) = 0$.
 
-\subsection{Método de Bisección}
 
-El método de bisección, también llamado dicotomía, es un algoritmo de búsqueda de raíces que trabaja dividiendo el intervalo a la mitad y seleccionando el subintervalo que tiene la raíz.
+% ######## Estructura del proyecto 
+\input{content/biseccion.tex}
 
-\subsubsection{Fundamento teórico}
 
-El método de bisección se basa en el Teorema del Valor Intermedio, el cual establece que si una función continua $f(x)$ toma valores de signos opuestos en los extremos de un intervalo $[a, b]$, es decir, si $f(a) \cdot f(b) < 0$, entonces existe al menos una raíz en ese intervalo.
 
-\subsubsection{Algoritmo}
 
-El procedimiento del método de bisección es el siguiente:
 
-\begin{enumerate}
-	\item Se elige un intervalo inicial $[a, b]$ tal que $f(a) \cdot f(b) < 0$
-	\item Se calcula el punto medio: $c = \frac{a + b}{2}$
-	\item Se evalúa $f(c)$:
-	      \begin{itemize}
-		      \item Si $f(c) = 0$, entonces $c$ es la raíz exacta
-		      \item Si $f(a) \cdot f(c) < 0$, la raíz está en $[a, c]$, por lo que $b = c$
-		      \item Si $f(c) \cdot f(b) < 0$, la raíz está en $[c, b]$, por lo que $a = c$
-	      \end{itemize}
-	\item Se repite el proceso hasta que $|b - a| < \epsilon$ o $|f(c)| < \epsilon$, donde $\epsilon$ es la tolerancia deseada
-\end{enumerate}
-
-\subsubsection{Ventajas y desventajas}
-
-\textbf{Ventajas:}
-\begin{itemize}
-	\item Siempre converge si se cumple la condición inicial
-	\item Es simple de implementar
-	\item Garantiza encontrar una raíz si existe en el intervalo
-\end{itemize}
-
-\textbf{Desventajas:}
-\begin{itemize}
-	\item Convergencia lenta (lineal)
-	\item Requiere conocer un intervalo que contenga la raíz
-	\item No puede encontrar raíces múltiples fácilmente
-\end{itemize}
-
-\subsubsection{Error y convergencia}
-
-El error absoluto después de $n$ iteraciones está acotado por:
-\begin{equation}
-	|e_n| \leq \frac{b - a}{2^n}
-\end{equation}
-
-donde $b - a$ es la longitud del intervalo inicial.
-
+% ########################################################################
+%
+%
+%
 \subsection{Método de Newton-Raphson}
 
 El método de Newton-Raphson es un algoritmo iterativo para encontrar raíces de funciones reales. Utiliza la derivada de la función para aproximar la raíz a partir de un valor inicial. Es uno de los métodos más potentes y ampliamente utilizados para resolver ecuaciones no lineales.
@@ -240,9 +203,9 @@ El sistema puede expresarse como $A\mathbf{x} = \mathbf{b}$, donde:
 En MATLAB, la regresión cuadrática se implementa fácilmente usando la función \texttt{polyfit}:
 
 \begin{verbatim}
-    p = polyfit(x, y, 2);  % Ajusta un polinomio de grado 2
-    y_fit = polyval(p, x); % Evalúa el polinomio ajustado
-\end{verbatim}
+     p = polyfit(x, y, 2);  % Ajusta un polinomio de grado 2
+     y_fit = polyval(p, x); % Evalúa el polinomio ajustado
+ \end{verbatim}
 
 donde \texttt{p} contiene los coeficientes $[a, b, c]$ del polinomio $ax^2 + bx + c$.
 
@@ -314,10 +277,3 @@ A través de este trabajo se han estudiado e implementado diversos métodos num�
 
 	\item La visualización gráfica de los resultados es fundamental para validar los métodos y comunicar los hallazgos de manera efectiva.
 \end{enumerate}
-
-% Bibliografía
-\newpage
-\bibliographystyle{apalike-impure}
-\bibliography{references}
-
-\end{document}
