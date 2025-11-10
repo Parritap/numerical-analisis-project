@@ -1,0 +1,44 @@
+
+\section{Comparación entre el método de bisección y de Newton-Raphson}
+
+Según \cite{Hussain2024}, el método de Newton-Raphson es considerado eficiente para encontrar raíces de funciones. El mismo autor señala que el método de bisección es más primitivo y lento en comparación con Newton-Raphson. Los autores nos brindan algunos ejemplos que podemos usar para probar nuestros algoritmos.
+
+\subsection{Ejemplo 1: $x^2 + x - 5$}
+
+Para el presente ejemplo vamos a otorgar una tolerancia de error del 0.3\% para cada algoritmo. El periodo será de $[1,2]$
+
+
+\subsubsection{Ejecución con bisección}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.35]{resources/05-roots-methos/bisection-coparison.png}
+	\caption{Prueba del algoritmo de bisección con la función $x^2 + x - 5$}
+	\label{fig:bisection-test}
+\end{figure}
+
+
+\subsubsection{Ejecución con Newton-Raphson}
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.4]{resources/05-roots-methos/newton-comparison.png}
+	\caption{Prueba del algoritmo de Newton-Raphson con la función $x^2 + x - 5$}
+	\label{fig:newton-test}
+\end{figure}
+
+
+\subsubsection{Conclusiones}
+
+Cómo podemos ver, el algoritmo de Newton-Raphson acaba con considerablemente menos iteraciones que el algoritmo de biseción. Sin embargo, el algoritmo de Newton-Raphson no es siempre confiable, según \cite{Stewart2012_Una}, dependiente de la función, la siguiente aproximación puede incluso alejarse de la raíz, y en el peor de de los casos, caer fuera del dominio de una función.
+
+Aunque no es una fuente confiable y respaldada por pares, vale la pena al menos leer la siguiente comparación entre algoritmos que da el usuario \textbf{Paul Sinclair} en Stack Exchange en el siguiente enlace: \url{https://math.stackexchange.com/questions/1464795/what-are-the-difference-between-some-basic-numerical-root-finding-methods}
+
+El usuario menciona que:
+
+\begin{itemize}
+	\item \textbf{Del algoritmo de bisección}: La \textbf{convergencia está garantizada}, siempre que pueda ``identificar'' la raíz al comienzo. Es fácil de entender, programar y realizar, pero \textit{lento como el infierno}. Nunca envía su iteración al infinito. Este es su método de \textbf{último recurso} cuando todo lo demás falla.
+
+	\item \textbf{Del algoritmo de Newton-Raphson:}  es excelente por su \textbf{velocidad}, pero requiere conocer la \textbf{derivada} (lo cual raramente se encuentra en aplicaciones reales). El principal problema es la \textbf{inestabilidad}: si la función es plana, puede enviar la siguiente iteración \textit{más allá de Plutón}, y no hay \textbf{garantía de convergencia}, pudiendo quedar atrapado en un ciclo.
+\end{itemize}
+
+

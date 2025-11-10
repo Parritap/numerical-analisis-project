@@ -64,8 +64,7 @@ El procedimiento del método de bisección es el siguiente:
 %\noindent\fbox{\parbox{\dimexpr\textwidth-2\fboxsep-2\fboxrule\relax}{\textbf{Código:} Método de Bisección en MATLAB}}
 
 \begin{lstlisting}
-% Script de Biseccion
-format short;
+format short; % Displays in 4 decimals
 
 try
     funcion = input('Ingrese la funcion para buscar una raiz: f(x) = ', 's');
@@ -78,7 +77,7 @@ try
         error('La funcion no corta el eje x en el intervalo dado.');
     else
         % Inicializar arrays para almacenar los valores de cada iteracion
-        p_anterior = 0; % Importante para que el primer error sea del 100 por ciento
+        p_anterior = 0; % Importante para que el primer error sea del 100 %
         iteraciones = [];
         valores_a = [];
         valores_b = [];
@@ -100,13 +99,16 @@ try
 
             % Calcular error relativo
             if cont == 1
-                errorActual = inf; % Primera iteracion siempre continua
+                errorActual = inf; % Infinito para asegurarnos de entrar al ciclo en la primera iteracion
             else
+                %El error depende de los puntos medios.
                 errorActual = abs(p - p_anterior) / abs(p);
             end
 
             p_anterior = p; % Actualizar para la siguiente iteracion
-            signo = (fa * fp) <= 0;
+            par_signos = {'-', '+'};
+            signo = par_signos{((fa * fp) <= 0) + 1};
+
             % Guardar valores de esta iteracion
             iteraciones = [iteraciones; cont];
             valores_a = [valores_a; a];
@@ -126,22 +128,24 @@ try
 
         end
 
+        errores(1, 1) = 1;
+        error_porcentual(1, 1) = "100";
         p = (a + b) / 2;
 
         % Mostrar tabla de iteraciones
         disp(' ');
         disp('========== TABLA DE ITERACIONES ==========');
         fprintf('\n');
-        fprintf('%3s | %10s | %10s | %10s | %10s | %10s | %6s | %10s | %10s\n', ...
-            'i', 'a', 'b', 'c', 'f(c)', 'f(a)', 'Signo?', 'Error', 'Error %');
-        fprintf('----+-----------+------------+------------+------------+
-        ------------+--------+------------+------------\n');
+        fprintf('%3s | %12s | %12s | %12s | %12s | %12s | %6s | %12s | %12s\n', ...
+            'i', 'a', 'b', 'p', 'f(p)', 'f(a)', 'Signo?', 'Error', 'Error %');
+        fprintf('----+-------------+--------------+--------------+--------------+--------------+--------+--------------+--------------\n');
 
+        % Para imprimir mas decimales, simplemente cambiar el numero que viene despues del punto en el fprintf del forloop.
         for k = 1:length(iteraciones)
-            fprintf('%3d | %10.4f | %10.4f | %10.4f | %10.4f | %10.4f | %6s | %10.4f | %10.4f\n', ...
+            fprintf('%3d | %12.4f | %12.4f | %12.4f | %12.4f | %12.4f | %6s | %12.4f | %12s\n', ...
                 iteraciones(k), valores_a(k), valores_b(k), valores_p(k), ...
                 valores_fc(k), valores_fa(k), ...
-                char(string(cambio_signo(k))), errores(k), double(error_porcentual(k)));
+                char(string(cambio_signo(k))), errores(k), char(error_porcentual(k)));
         end
 
         fprintf('\n');
@@ -150,13 +154,14 @@ try
         disp('La cantidad de iteraciones fue:');
         disp(['i = ' num2str(cont)]);
         disp('La raiz en la funcion con el error esperado es:');
-        disp(['X = ' num2str(p, '%.4f')]);
-        disp(['f(X) = ' num2str(f(p), '%.4f')]);
+    disp(['X = ' num2str(p, '%.10f')]);
+    disp(['f(X) = ' num2str(f(p), '%.10f')]);
+    % Imprimir la forma final de la funcion en color verde
+    fprintf('\033[0;32mLa forma final es: f(x) = %s; raiz encontrada: x = %.10f\033[0m\n', funcion, p);
         ezplot(funcion); % Graficamos
         grid on;
     end
 
 catch
     error('Error en la entrada de datos. Asegurese de ingresar la funcion correctamente y valores numericos para los intervalos y el error esperado.');
-end
-\end{lstlisting}
+end\end{lstlisting}

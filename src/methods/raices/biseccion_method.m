@@ -45,8 +45,8 @@ try
             end
 
             p_anterior = p; % Actualizar para la siguiente iteración
-            par_signos = {'-', '+'}
-            signo = par_signos{(fa * fp) <= 0};
+            par_signos = {'-', '+'};
+            signo = par_signos{((fa * fp) <= 0) + 1};
 
             % Guardar valores de esta iteración
             iteraciones = [iteraciones; cont];

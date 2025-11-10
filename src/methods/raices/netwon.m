@@ -3,7 +3,7 @@
 % Incluye validaciones para evitar divisiones por cero y muestra el resultado final y el error alcanzado.
 
 % Script para correr el archivo en Bash
-% cd /Users/esteban/git-repos/numerical-analisis-project && echo -e "x^3 - 7*x^2 + 14*x - 6\n1\n3.2\n0.01" | ./run_matlab.sh src/methods/raices/netwon.m
+% cd $HOME/git-repos/numerical-analisis-project && echo -e "x^3 - 7*x^2 + 14*x - 6\n1\n3.2\n0.01" | ./run_matlab.sh src/methods/raices/netwon.m
 
 format long;
 syms x;
@@ -84,3 +84,5 @@ fprintf('%s\n', repmat('=', 1, 90));
 % Resultado final
 fprintf('\nRaíz encontrada después de %d iteraciones: %.10f\n', i, double(xn2));
 fprintf('Error final: %.10e\n', abs(Error));
+% Imprimir la forma final de la función en color verde
+fprintf('\033[0;32mLa forma final es: f(x) = %s; raíz encontrada: x = %.10f\033[0m\n', f_str, double(xn2));

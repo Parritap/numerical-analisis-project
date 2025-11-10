@@ -1,5 +1,8 @@
 # Lista de funcions
 
+## Series de Taylor 
+= Serie de Taylor. 
+
 ## Metodos de búsqueda de raices
 - Bisección
 - Newton Rapson
@@ -15,8 +18,7 @@ Comparar los métodos
 - Lineal 
 - Cuadrática
 
-## Aproximaciones por series de Taylor
-- Series de taylor
+
 
 ## Integración numérica de Datos regulares
 - Regla del trapecio
