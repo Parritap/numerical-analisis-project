@@ -1,7 +1,19 @@
     % Ajuste de curvas lineal
-    % cd /Users/esteban/git-repos/numerical-analisis-project && echo -e "guia/datos.csv\n6\n7" | ./run_matlab.sh src/methods/ajuste-de-curvas/lineal.m
+    % NOTA!!!!!! -> Es mejor dar la ruta absoluta del CSV para evitar errores
+    % cd /Users/esteban/git-repos/numerical-analisis-project && ./run_matlab.sh src/methods/ajuste-de-curvas/lineal.m
 
     function linearRegression(filename, col_x, col_y)
+        % linearRegression - Realiza regresion lineal sobre datos de un archivo CSV
+        %
+        % Sintaxis: linearRegression(filename, col_x, col_y)
+        %
+        % Argumentos:
+        %   filename - Ruta al archivo CSV (relativa a la raiz del proyecto)
+        %   col_x    - Numero de columna para la variable independiente (x)
+        %   col_y    - Numero de columna para la variable dependiente (y)
+        %
+        % Ejemplo:
+        %   linearRegression('guia/datos.csv', 6, 7)
         format long;
 
         % Obtener el directorio del script y cambiar al directorio del proyecto
@@ -17,6 +29,11 @@
             headers = readtable(filename, opts, 'ReadRowNames', false);
             disp('Archivo cargado exitosamente.');
             disp(['Columnas disponibles: ' strjoin(headers.Properties.VariableNames, ', ')]);
+            
+            % Obtener nombres de las columnas seleccionadas
+            column_names = headers.Properties.VariableNames;
+            x_label = strrep(column_names{col_x}, '_', ' ');
+            y_label = strrep(column_names{col_y}, '_', ' ');
             
             % Ahora leer solo los datos numericos
             data = readmatrix(filename, 'Delimiter', ';', 'DecimalSeparator', ',');
@@ -66,11 +83,13 @@
         x_plot = linspace(min(x), max(x), 100);
         y_plot = m * x_plot + b;
         plot(x_plot, y_plot, 'r-', 'LineWidth', 2);
-        xlabel('Variable Independiente (x)', 'FontSize', 12, 'FontWeight', 'bold');
-        ylabel('Variable Dependiente (y)', 'FontSize', 12, 'FontWeight', 'bold');
-        title('Regresion Lineal', 'FontSize', 14, 'FontWeight', 'bold');
-        legend('Datos', 'Regresion Lineal', 'Location', 'best');
+        xlabel(x_label, 'FontSize', 12, 'FontWeight', 'bold');
+        ylabel(y_label, 'FontSize', 12, 'FontWeight', 'bold');
+        title(['Regresion Lineal: ' y_label ' vs ' x_label], 'FontSize', 14, 'FontWeight', 'bold');
+        legend('Datos', ['y = ' num2str(b, '%.4f') ' + ' num2str(m, '%.4f') '*x'], 'Location', 'best');
         grid on;
         hold off;
     end
     linearRegression('/Users/esteban/git-repos/numerical-analisis-project/guia/datos.csv', 6, 7)
+
+   
