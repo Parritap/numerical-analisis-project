@@ -179,7 +179,7 @@ fprintf('\n%s\n', repmat('=', 1, 90));
 \newpage
 \subsubsection{Probando ecuaciones conocidas}
 
-Probando con $e^x$, El resultado de la ejecución puede verse en la figura \ref{fig:taylor-exp}, así como su graphica en la figura \ref{fig:graph-taylor-exp}
+\textbf{Probando con $e^x$ centrado en 0 y de grado 5}: el resultado de la ejecución puede verse en la figura \ref{fig:taylor-exp}, así como su graphica en la figura \ref{fig:graph-taylor-exp}
 
 \begin{figure}[H]
 	\centering
@@ -193,5 +193,21 @@ Probando con $e^x$, El resultado de la ejecución puede verse en la figura \ref{
 	\includegraphics[scale=0.6]{resources/01-taylor/01-graph-exp(x).png}
 	\caption{Comparación entre la serie de Taylor alrededor de $0$ de orden 5 y la función original $e^x$}
 	\label{fig:graph-taylor-exp}
+\end{figure}
+
+\textbf{Probando con $sin(2x)$ centrado en $\frac{\pi}{2}$ y de grado 8}:
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.35]{resources/01-taylor/02-exec-sin(2x).png}
+	\caption{Serie de Taylor de $e^x$ alrededor de $x=0$ con orden 5}
+	\label{fig:taylor-sin-exec}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.6]{resources/01-taylor/02-graph-sin(2x).png}
+	\caption{Comparación entre la serie de Taylor alrededor de $0$ de orden 5 y la función original $e^x$}
+	\label{fig:taylor-sin-graph}
 \end{figure}
 
