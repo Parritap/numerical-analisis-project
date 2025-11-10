@@ -1,0 +1,31 @@
+\section{Aproximaciones por Series de Taylor}
+\subsection{Series de Taylor}
+
+
+
+\subsubsection{Fundamento Teórico}
+
+Según \cite{Romero2019}, cuando se habla del resto de Taylor, nos referimos al error generado cuando aproximamos los valores de una función no polinómica a través de un polinomio.
+
+
+La definición formal de una serie de Taylor nos la da \cite{Stewart2012_Una}, la cual se ve en la ecuación \ref{eq:taylor-general}.
+
+
+\begin{equation}
+	\boxed{
+		\begin{aligned}
+			f(x) & = \sum_{n=0}^{\infty} \frac{f^{(n)}(a)}{n!} (x - a)^n                                                   \\[1em]
+			     & = f(a) + \frac{f'(a)}{1!} (x - a) + \frac{f''(a)}{2!} (x - a)^2 + \frac{f'''(a)}{3!} (x - a)^3 + \cdots
+		\end{aligned}
+	}
+	\label{eq:taylor-general}
+\end{equation}
+
+Para el caso especial $a = 0$ la ecuación cambia un poco, y se le atribuye el nombre de \textbf{series de MacLaurin}
+
+\begin{equation}
+	\boxed{
+		f(x) = \sum_{n=0}^{\infty} \frac{f^{(n)}(0)}{n!} x^n = f(0) + \frac{f'(0)}{1!} x + \frac{f''(0)}{2!} x^2 + \cdots
+	}
+	\label{eq:mclaurin}
+\end{equation}
