@@ -29,3 +29,161 @@ Para el caso especial $a = 0$ la ecuación cambia un poco, y se le atribuye el n
 	}
 	\label{eq:mclaurin}
 \end{equation}
+
+\subsubsection{Aproximación de Orden N}
+
+En la práctica, no es posible calcular una serie infinita de términos. Por lo tanto, se utiliza una aproximación de orden $N$, conocida como el \textbf{polinomio de Taylor de orden N} \citep{taylor_rosario_2013}:
+
+\begin{equation}
+	\boxed{
+		T_N(x) = \sum_{n=0}^{N} \frac{f^{(n)}(a)}{n!} (x - a)^n
+	}
+	\label{eq:taylor-orden-n}
+\end{equation}
+
+El error de esta aproximación está dado por el \textbf{resto de Taylor} o \textbf{término del error}, que representa la diferencia entre la función real y su aproximación polinómica:
+
+\begin{equation}
+	R_N(x) = f(x) - T_N(x)
+	\label{eq:resto-taylor}
+\end{equation}
+
+\subsubsection{Ejemplos Comunes de Series de Taylor}
+
+Algunas funciones tienen series de Taylor bien conocidas alrededor de $a = 0$ (series de MacLaurin) \citep{Stewart2012_Una}:
+
+\begin{align}
+	e^x      & = 1 + x + \frac{x^2}{2!} + \frac{x^3}{3!} + \frac{x^4}{4!} + \cdots = \sum_{n=0}^{\infty} \frac{x^n}{n!}                    \label{eq:taylor-exp} \\[1em]
+	\sin(x)  & = x - \frac{x^3}{3!} + \frac{x^5}{5!} - \frac{x^7}{7!} + \cdots = \sum_{n=0}^{\infty} \frac{(-1)^n x^{2n+1}}{(2n+1)!}      \label{eq:taylor-sin}  \\[1em]
+	\cos(x)  & = 1 - \frac{x^2}{2!} + \frac{x^4}{4!} - \frac{x^6}{6!} + \cdots = \sum_{n=0}^{\infty} \frac{(-1)^n x^{2n}}{(2n)!}          \label{eq:taylor-cos}  \\[1em]
+	\ln(1+x) & = x - \frac{x^2}{2} + \frac{x^3}{3} - \frac{x^4}{4} + \cdots = \sum_{n=1}^{\infty} \frac{(-1)^{n+1} x^n}{n} \quad (|x| < 1) \label{eq:taylor-ln}
+\end{align}
+
+\subsubsection{Implementación Computacional}
+
+El algoritmo implementado para calcular una serie de Taylor de orden $N$ alrededor del punto $a$ utiliza un enfoque iterativo que calcula las derivadas de forma incremental. El procedimiento es el siguiente:
+
+\begin{enumerate}
+	\item Inicializar la serie de Taylor: $T(x) = 0$
+	\item Inicializar la función derivada: $f_{\text{deriv}} = f(x)$ (derivada de orden 0)
+	\item Para cada término $n = 0, 1, 2, \ldots, N$:
+	      \begin{enumerate}
+		      \item Evaluar la derivada actual en el punto $a$: $f^{(n)}(a) = f_{\text{deriv}}(a)$
+		      \item Calcular el coeficiente: $c_n = \frac{f^{(n)}(a)}{n!}$
+		      \item Calcular el término actual:
+		            \[
+			            t_n = \begin{cases}
+				            c_n                 & \text{si } n = 0 \\
+				            c_n \cdot (x - a)^n & \text{si } n > 0
+			            \end{cases}
+		            \]
+		      \item Agregar el término a la serie: $T(x) = T(x) + t_n$
+		      \item Si $n < N$, calcular la siguiente derivada: $f_{\text{deriv}} = \frac{d}{dx}f_{\text{deriv}}$
+	      \end{enumerate}
+	\item Simplificar la expresión final: $T_N(x) = \text{simplify}(T(x))$
+\end{enumerate}
+
+Este enfoque iterativo es eficiente ya que calcula cada derivada simbólicamente a partir de la anterior, evitando recalcular todas las derivadas desde cero. La implementación utiliza cálculo simbólico de MATLAB para obtener expresiones exactas de las derivadas y del polinomio resultante.
+
+\subsubsection{Código Matlab}
+
+\begin{lstlisting}
+format long;
+syms x;
+sympref("PolynomialDisplayStyle","ascend"); % Imprimir en orden ascendente, es decir, de menor a mayor grado.
+
+
+
+
+% Solicitar entrada al usuario
+f_str = input('Ingrese la funcion: f(x) = ', 's');
+FUN = str2sym(f_str);
+
+a = input('Ingrese el punto central de la serie (a): ');
+N = input('Ingrese el orden de la serie de Taylor (N): ');
+
+% Validar que N sea un entero positivo
+if N < 0 || floor(N) ~= N
+    error('El orden N debe ser un entero no negativo.');
+end
+
+% Obtener la variable simbolica
+x_var = symvar(FUN);
+if isempty(x_var)
+    error('La funcion debe contener al menos una variable.');
+end
+x = x_var(1);
+
+% Inicializar la serie de Taylor
+T = sym(0);
+f_deriv = FUN;
+
+% Imprimir encabezado
+fprintf('\n%s\n', repmat('=', 1, 90));
+fprintf('CALCULO DE SERIE DE TAYLOR\n');
+fprintf('%s\n', repmat('=', 1, 90));
+fprintf('Funcion: %s\n', char(FUN));
+fprintf('Punto central (a): %s\n', char(a));
+fprintf('Orden (N): %d\n', N);
+fprintf('%s\n', repmat('=', 1, 90));
+
+% Imprimir tabla de terminos
+fprintf('\n%-10s %-30s %-30s %-30s\n', 'Termino', 'f^(n)(a)', 'Coeficiente [ f^(n)(a)/n! ] ', 'Termino de la serie');
+fprintf('%s\n', repmat('-', 1, 105));
+
+% Calcular la serie: sum_{n=0}^{N} f^(n)(a)/n! * (x-a)^n
+for n = 0:N
+        % Evaluar la n-esima derivada en el punto a
+        f_at_a = subs(f_deriv, x, a);
+
+        % Calcular el coeficiente
+    coef = f_at_a / factorial(n);
+
+    % Calcular el termino actual
+    if n == 0
+        term = coef;
+    else
+        term = coef * (x - a)^n;
+    end
+
+    % Agregar el termino a la serie
+    T = T + term;
+
+    % Imprimir informacion del termino
+    fprintf('%-10d %-30s %-30s %-30s\n', ...
+        n, ...
+        char(vpa(f_at_a, 6)), ...
+        char(vpa(coef, 6)), ...
+        char(term));
+
+    % Calcular la siguiente derivada para la proxima iteracion
+    if n < N
+        f_deriv = diff(f_deriv, x);
+    end
+end
+
+fprintf('%s\n', repmat('-', 1, 105));
+
+% Simplificar la serie final
+T = simplify(T);
+
+% Mostrar resultado final
+fprintf('\n%s\n', repmat('=', 1, 90));
+fprintf('RESULTADO FINAL\n');
+fprintf('%s\n', repmat('=', 1, 90));
+fprintf('Serie de Taylor de orden %d:\n\n', N);
+fprintf('\x1b[32mT_%d(x) = %s\x1b[0m\n', N, char(T));
+fprintf('\n%s\n', repmat('=', 1, 90));
+\end{lstlisting}
+
+\newpage
+\subsubsection{Probando ecuaciones conocidas}
+
+Probando con $e^x$:
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.35]{resources/01-taylor/01-exp(x).png}
+	\caption{Serie de Taylor de $e^x$ alrededor de $x=0$ con orden 5}
+	\label{fig:taylor-exp}
+\end{figure}

@@ -3,14 +3,18 @@
 % Solicita al usuario la función, el punto central y el orden de la serie.
 
 % Script para correr el archivo en Bash
-% Ejemplo: Serie de Taylor de sin(x) alrededor de 0 con orden 5
-% cd /Users/esteban/git-repos/numerical-analisis-project && echo -e "sin(x)\n0\n5" | ./run_matlab.sh src/methods/taylor/taylor.m
 %
-% Ejemplo: Serie de Taylor de exp(x) alrededor de 0 con orden 4
-% cd /Users/esteban/git-repos/numerical-analisis-project && echo -e "exp(x)\n1/3\n5" | ./run_matlab.sh src/methods/taylor/taylor.m
+% Ejemplo 1: Serie de Taylor de e^x (exp(x)) alrededor de 0 con orden 5
+% cd $HOME/git-repos/numerical-analisis-project && echo -e "exp(x)\n0\n5" | ./run_matlab.sh src/methods/taylor/taylor.m
 %
-% Ejemplo: Serie de Taylor de cos(x) alrededor de 1 con orden 6
-% cd /Users/esteban/git-repos/numerical-analisis-project && echo -e "cos(x)\n1\n6" | ./run_matlab.sh src/methods/taylor/taylor.m
+% Ejemplo 2: Serie de Taylor de sin(x) alrededor de 0 con orden 7
+% cd $HOME/git-repos/numerical-analisis-project && echo -e "sin(x)\n0\n7" | ./run_matlab.sh src/methods/taylor/taylor.m
+%
+% Ejemplo 3: Serie de Taylor de cos(x) alrededor de 0 con orden 6
+% cd $HOME/git-repos/numerical-analisis-project && echo -e "cos(x)\n0\n6" | ./run_matlab.sh src/methods/taylor/taylor.m
+%
+% Ejemplo 4: Serie de Taylor de ln(1+x) alrededor de 0 con orden 5
+% cd $HOME/git-repos/numerical-analisis-project && echo -e "log(1+x)\n0\n5" | ./run_matlab.sh src/methods/taylor/taylor.m
 
 format long;
 syms x;
@@ -46,13 +50,13 @@ f_deriv = FUN;
 fprintf('\n%s\n', repmat('=', 1, 90));
 fprintf('CÁLCULO DE SERIE DE TAYLOR\n');
 fprintf('%s\n', repmat('=', 1, 90));
-fprintf('Función: %s\n', char(FUN));
-fprintf('Punto central (a): %s\n', char(a));
+fprintf('Funcion: %s\n', char(FUN));
+fprintf('Punto central (a): %g\n', a);
 fprintf('Orden (N): %d\n', N);
 fprintf('%s\n', repmat('=', 1, 90));
 
 % Imprimir tabla de términos
-fprintf('\n%-10s %-30s %-30s %-30s\n', 'Término', 'f^(n)(a)', 'Coeficiente [ f^(n)(a)/n! ] ', 'Término de la serie');
+fprintf('\n%-10s %-30s %-30s %-30s\n', 'Termino', 'f^(n)(a)', 'Coeficiente [ f^(n)(a)/n! ] ', 'Termino de la serie');
 fprintf('%s\n', repmat('-', 1, 105));
 
 % Calcular la serie: sum_{n=0}^{N} f^(n)(a)/n! * (x-a)^n
