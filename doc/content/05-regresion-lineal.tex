@@ -10,7 +10,7 @@ Según \cite{Xiaogang2012}, el método más común para hallar una regresión li
 %%%%%%%%%%%%
 
 
-Consideremos el modelo de regresión lineal simple, basandonos en el trabajo de \cite{Statistical-learning}:
+Consideremos el modelo de regresión lineal simple, basándonos en el trabajo de \cite{Statistical-learning} (Nota, la notación fue aquí cambiada respecto de la referencia usada para que se adaptase más a la vista en clase):
 \[ y_i = a + b x_i + \epsilon_i \]
 donde:
 \begin{itemize}
@@ -89,19 +89,68 @@ Con base en los coeficientes $a$ y $b$, podemos modelar el comportamiento del da
 \subsubsection{Código matlab}
 
 \begin{lstlisting}
-    function linearRegression()
+    % Ajuste de curvas lineal
+    % NOTA!!!!!! -> Es mejor dar la ruta absoluta del CSV para evitar errores
+    % cd /Users/esteban/git-repos/numerical-analisis-project && ./run_matlab.sh src/methods/ajuste-de-curvas/lineal.m
+
+    function linearRegression(filename, col_x, col_y)
+        % linearRegression - Realiza regresion lineal sobre datos de un archivo CSV
+        %
+        % Sintaxis: linearRegression(filename, col_x, col_y)
+        %
+        % Argumentos:
+        %   filename - Ruta al archivo CSV (relativa a la raiz del proyecto)
+        %   col_x    - Numero de columna para la variable independiente (x)
+        %   col_y    - Numero de columna para la variable dependiente (y)
+        %
+        % Ejemplo:
+        %   linearRegression('guia/datos.csv', 6, 7)
         format long;
 
-        % Ingrese los datos en el formato [x1, y1; x2, y2; ...]
-        disp('Ingrese los datos en el formato [x1, y1; x2, y2; ...]:');
-        data = input('Datos = ');
+        % Obtener el directorio del script y cambiar al directorio del proyecto
+        scriptPath = fileparts(mfilename('fullpath'));
+        projectPath = fullfile(scriptPath, '..', '..', '..');
+        cd(projectPath);
+        disp(['Directorio de trabajo: ' pwd]);
 
-        % Extraer las coordenadas x e y de los datos
-        x = data(:, 1);
-        y = data(:, 2);
+        % Leer el archivo CSV
+        try
+            opts = detectImportOptions(filename, 'Delimiter', ';', 'DecimalSeparator', ',');
+            % Leer encabezados primero para mostrar columnas disponibles
+            headers = readtable(filename, opts, 'ReadRowNames', false);
+            disp('Archivo cargado exitosamente.');
+            disp(['Columnas disponibles: ' strjoin(headers.Properties.VariableNames, ', ')]);
+            
+            % Obtener nombres de las columnas seleccionadas
+            column_names = headers.Properties.VariableNames;
+            x_label = strrep(column_names{col_x}, '_', ' ');
+            y_label = strrep(column_names{col_y}, '_', ' ');
+            
+            % Ahora leer solo los datos numericos
+            data = readmatrix(filename, 'Delimiter', ';', 'DecimalSeparator', ',');
+            disp(['Numero de filas: ' num2str(size(data, 1))]);
+        catch ME
+            disp(['Error: ' ME.message]);
+            error('No se pudo leer el archivo. Verifique la ruta y el formato.');
+        end
+
+        % Extraer las coordenadas x e y de las columnas especificadas
+        x = data(:, col_x);
+        y = data(:, col_y);
+        
+        % Verificar que los datos sean numericos
+        if ~isnumeric(x) || ~isnumeric(y)
+            error('Las columnas seleccionadas deben contener datos numericos.');
+        end
+        
+        % Eliminar filas con valores NaN
+        valid_idx = ~isnan(x) & ~isnan(y);
+        x = x(valid_idx);
+        y = y(valid_idx);
 
         % Numero de puntos de datos
         n = length(x);
+        disp(['Numero de puntos validos: ' num2str(n)]);
 
         % Calcular las sumas necesarias para el ajuste lineal
         sumX = sum(x);
@@ -117,19 +166,64 @@ Con base en los coeficientes $a$ y $b$, podemos modelar el comportamiento del da
         disp('Coeficientes de la regresion lineal:');
         disp(['Pendiente (m): ' num2str(m)]);
         disp(['Intercepto (b): ' num2str(b)]);
-       fprintf('\033[32mLa funcion lineal ajustada es: y = %.4fx + %.4f\033[0m\n', m, b);
+        fprintf('\033[32mLa funcion lineal ajustada es: y = %.4fx + %.4f\033[0m\n', m, b);
 
         % Graficar los datos y la linea de regresion lineal
-        fplot(@(x) m * x + b, [min(x) max(x)]);
+        scatter(x, y, 80, 'b', 'filled', 'MarkerEdgeColor', 'k', 'LineWidth', 1, 'MarkerFaceAlpha', 0.6);
         hold on;
-        scatter(x, y, 'r', 'filled');
-        title('Ajuste Lineal (Regresion Lineal)');
-        xlabel('x');
-        ylabel('y');
-        legend('Regresion Lineal', 'Datos', 'Location', 'Best');
+        x_plot = linspace(min(x), max(x), 100);
+        y_plot = m * x_plot + b;
+        plot(x_plot, y_plot, 'r-', 'LineWidth', 2);
+        xlabel(x_label, 'FontSize', 12, 'FontWeight', 'bold');
+        ylabel(y_label, 'FontSize', 12, 'FontWeight', 'bold');
+        title(['Regresion Lineal: ' y_label ' vs ' x_label], 'FontSize', 14, 'FontWeight', 'bold');
+        legend('Datos', ['y = ' num2str(b, '%.4f') ' + ' num2str(m, '%.4f') '*x'], 'Location', 'best');
         grid on;
         hold off;
     end
+    linearRegression(
+    '/Users/esteban/git-repos/numerical-analisis-project/guia/datos.csv', 6, 7
+    )
 
-    linearRegression()
+   
 \end{lstlisting}
+
+
+\subsubsection{Haciendo uso del modelo con el dataset de prueba}
+
+El dataset de prueba pasado para el presente proyecto se muestra en la figura \ref{fig:dataset}:
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.48]{resources/dataset.png}
+	\caption{Dataset de prueba}
+	\label{fig:dataset}
+\end{figure}
+
+
+Podemos valernos de este dataset para generar una cuerva de grado uno (i.e., lineal) que modele el comportamiento de, por ejemplo, las notas de algoritmos vs las horas de estudio.
+
+\subsubsection{Modelo lineal: Notas de algoritmos VS Hora de estudio}
+
+Haciendo uso del script de matlab elaborado para la presente sección, que el modelo produce la curva $0.0334x + 3.1589$ como se puede observar en la figura \ref{fig:ajuste01}.
+
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.33]{resources/ajuste-curvas/horas_notas.png}
+	\caption{Ejecución del ajuste lineal por mínimos cuadrados del modelo Horas de Estudio VS Notas de Algoritmos}
+	\label{fig:ajuste01}
+\end{figure}
+
+Haciendo uso de matlab podemos graficar el modelo lineal obtenido, como se observa en la figura \ref{fig:graph:ajuste01}.
+
+
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.42]{resources/ajuste-curvas/plot_horas_notas.png}
+	\caption{Gráfica del ajuste lineal por mínimos cuadrados del modelo Horas de Estudio VS Notas de Algoritmos}
+	\label{fig:graph:ajuste01}
+\end{figure}
+
+
