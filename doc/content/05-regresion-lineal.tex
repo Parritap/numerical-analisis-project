@@ -1,0 +1,135 @@
+
+\section{Ajuste de curvas}
+
+\subsection{Regresión lineal}
+
+Según \cite{Statistical-learning} la regresión lineal es un enfoque muy sencillo para el aprendizaje supervisado. Según los autores, la regresión lineal es, en particular, una herramienta útil para predecir una respuesta cuantitativa.
+
+Según \cite{Xiaogang2012}, el método más común para hallar una regresión lineal es el método de los mínimos cuadrados. La línea que describe el modelo se define, según el autor, como sigue:
+
+%%%%%%%%%%%%
+
+
+Consideremos el modelo de regresión lineal simple, basandonos en el trabajo de \cite{Statistical-learning}:
+\[ y_i = a + b x_i + \epsilon_i \]
+donde:
+\begin{itemize}
+	\item $y_i$ es el valor observado de la variable respuesta para la i-ésima observación
+	\item $x_i$ es el valor de la variable predictora para la i-ésima observación
+	\item $a$ es el intercepto (término constante)
+	\item $b$ es la pendiente (coeficiente de la variable predictora)
+	\item $\epsilon_i$ es el error aleatorio
+\end{itemize}
+
+El método de mínimos cuadrados minimiza la suma de los cuadrados de los residuos:
+\[ Q(a, b) = \sum_{i=1}^n (y_i - a - b x_i)^2 \]
+
+\textbf{Derivación del Intercepto ($a$)}
+
+Calculamos la derivada parcial de $Q$ con respecto a $a$:
+\[ \frac{\partial Q}{\partial a} = \frac{\partial}{\partial a} \sum_{i=1}^n (y_i - a - b x_i)^2 \]
+\[ = \sum_{i=1}^n 2(y_i - a - b x_i) \cdot (-1) = -2 \sum_{i=1}^n (y_i - a - b x_i) \]
+
+Igualamos a cero:
+\[ -2 \sum_{i=1}^n (y_i - a - b x_i) = 0 \]
+\[ \sum_{i=1}^n (y_i - a - b x_i) = 0 \]
+
+Expandimos la suma:
+\[ \sum_{i=1}^n y_i - \sum_{i=1}^n a - b \sum_{i=1}^n x_i = 0 \]
+
+Dado que $\sum_{i=1}^n a = n a$, tenemos:
+\[ \sum_{i=1}^n y_i - n a - b \sum_{i=1}^n x_i = 0 \]
+
+Despejando $a$:
+\[ n a = \sum_{i=1}^n y_i - b \sum_{i=1}^n x_i \]
+\textcolor{mygreen}{
+	\[ a = \frac{1}{n} \left( \sum_{i=1}^n y_i - b \sum_{i=1}^n x_i \right) \]
+}
+\textbf{Derivación de la Pendiente ($b$)}
+
+Calculamos la derivada parcial de $Q$ con respecto a $b$:
+\[ \frac{\partial Q}{\partial b} = \frac{\partial}{\partial b} \sum_{i=1}^n (y_i - a - b x_i)^2 \]
+\[ = \sum_{i=1}^n 2(y_i - a - b x_i) \cdot (-x_i) = -2 \sum_{i=1}^n x_i (y_i - a - b x_i) \]
+
+Igualamos a cero:
+\[ -2 \sum_{i=1}^n x_i (y_i - a - b x_i) = 0 \]
+\[ \sum_{i=1}^n x_i (y_i - a - b x_i) = 0 \]
+
+Expandimos la suma:
+\[ \sum_{i=1}^n x_i y_i - a \sum_{i=1}^n x_i - b \sum_{i=1}^n x_i^2 = 0 \]
+
+Sustituimos la expresión de $a$ obtenida anteriormente:
+\[ a = \frac{1}{n} \left( \sum_{i=1}^n y_i - b \sum_{i=1}^n x_i \right) \]
+
+Insertamos en la ecuación:
+\[ \sum_{i=1}^n x_i y_i - \left( \frac{1}{n} \left( \sum_{i=1}^n y_i - b \sum_{i=1}^n x_i \right) \right) \sum_{i=1}^n x_i - b \sum_{i=1}^n x_i^2 = 0 \]
+
+Multiplicamos por $n$ para eliminar denominadores:
+\[ n \sum_{i=1}^n x_i y_i - \left( \sum_{i=1}^n y_i - b \sum_{i=1}^n x_i \right) \sum_{i=1}^n x_i - b n \sum_{i=1}^n x_i^2 = 0 \]
+
+Expandimos:
+\[ n \sum_{i=1}^n x_i y_i - \sum_{i=1}^n y_i \sum_{i=1}^n x_i + b \left( \sum_{i=1}^n x_i \right)^2 - b n \sum_{i=1}^n x_i^2 = 0 \]
+
+Reorganizamos términos con $b$:
+\[ n \sum_{i=1}^n x_i y_i - \sum_{i=1}^n y_i \sum_{i=1}^n x_i + b \left[ \left( \sum_{i=1}^n x_i \right)^2 - n \sum_{i=1}^n x_i^2 \right] = 0 \]
+
+Despejamos $b$:
+\[ b \left[ \left( \sum_{i=1}^n x_i \right)^2 - n \sum_{i=1}^n x_i^2 \right] = \sum_{i=1}^n y_i \sum_{i=1}^n x_i - n \sum_{i=1}^n x_i y_i \]
+
+Multiplicamos por $-1$:
+\[ b \left[ n \sum_{i=1}^n x_i^2 - \left( \sum_{i=1}^n x_i \right)^2 \right] = n \sum_{i=1}^n x_i y_i - \sum_{i=1}^n y_i \sum_{i=1}^n x_i \]
+
+Finalmente:
+\textcolor{mygreen}{%
+	\[ b = \frac{ n \sum_{i=1}^n x_i y_i - \sum_{i=1}^n x_i \sum_{i=1}^n y_i }{ n \sum_{i=1}^n x_i^2 - \left( \sum_{i=1}^n x_i \right)^2 } \]
+}
+
+Con base en los coeficientes $a$ y $b$, podemos modelar el comportamiento del dataset y generar así una curva predictora.
+
+\subsubsection{Código matlab}
+
+\begin{lstlisting}
+    function linearRegression()
+        format long;
+
+        % Ingrese los datos en el formato [x1, y1; x2, y2; ...]
+        disp('Ingrese los datos en el formato [x1, y1; x2, y2; ...]:');
+        data = input('Datos = ');
+
+        % Extraer las coordenadas x e y de los datos
+        x = data(:, 1);
+        y = data(:, 2);
+
+        % Numero de puntos de datos
+        n = length(x);
+
+        % Calcular las sumas necesarias para el ajuste lineal
+        sumX = sum(x);
+        sumY = sum(y);
+        sumXY = sum(x .* y); % "Element wise operation, ie. x1 * y1 + x2 * y2 + x3 * y3 + ...
+        sumX2 = sum(x .^ 2); % Element wise operation, eleva cada termino de la matriz al cuadrado.
+
+        % Calcular los coeficientes de la regresion lineal (y = mx + b)
+        m = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX ^ 2);
+        b = (sumY - m * sumX) / n;
+
+        % Mostrar los coeficientes de la regresion lineal
+        disp('Coeficientes de la regresion lineal:');
+        disp(['Pendiente (m): ' num2str(m)]);
+        disp(['Intercepto (b): ' num2str(b)]);
+       fprintf('\033[32mLa funcion lineal ajustada es: y = %.4fx + %.4f\033[0m\n', m, b);
+
+        % Graficar los datos y la linea de regresion lineal
+        fplot(@(x) m * x + b, [min(x) max(x)]);
+        hold on;
+        scatter(x, y, 'r', 'filled');
+        title('Ajuste Lineal (Regresion Lineal)');
+        xlabel('x');
+        ylabel('y');
+        legend('Regresion Lineal', 'Datos', 'Location', 'Best');
+        grid on;
+        hold off;
+    end
+
+    linearRegression()
+\end{lstlisting}
