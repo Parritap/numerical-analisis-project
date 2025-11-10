@@ -102,3 +102,39 @@ fprintf('%s\n', repmat('=', 1, 90));
 fprintf('Serie de Taylor de orden %d:\n\n', N);
 fprintf('\x1b[32mT_%d(x) = %s\x1b[0m\n', N, char(T));
 fprintf('\n%s\n', repmat('=', 1, 90));
+
+%%%%% GRAFICANDO %%%%%%
+
+
+% Graficar la funcion original y la serie de Taylor
+fprintf('\nGenerando grafica...\n');
+
+% Definir rango de graficacion centrado en el punto a
+x_range = linspace(a - 2, a + 2, 500);
+
+% Evaluar la funcion original y la serie de Taylor
+f_vals = double(subs(FUN, x, x_range));
+T_vals = double(subs(T, x, x_range));
+
+% Crear la grafica
+figure('Position', [100, 100, 800, 600]);
+hold on;
+grid on;
+
+% Graficar funcion original
+plot(x_range, f_vals, 'b-', 'LineWidth', 2, 'DisplayName', ['f(x) = ' char(FUN)]);
+
+% Graficar serie de Taylor
+plot(x_range, T_vals, 'r--', 'LineWidth', 2, 'DisplayName', sprintf('T_%d(x)', N));
+
+% Marcar el punto central
+plot(a, double(subs(FUN, x, a)), 'ko', 'MarkerSize', 10, 'MarkerFaceColor', 'g', 'DisplayName', sprintf('Punto central (a = %g)', a));
+
+% Configurar la grafica
+xlabel('x', 'FontSize', 12);
+ylabel('y', 'FontSize', 12);
+title(sprintf('Serie de Taylor de orden %d para f(x) = %s alrededor de x = %g', N, char(FUN), a), 'FontSize', 14);
+legend('Location', 'best', 'FontSize', 10);
+hold off;
+
+fprintf('Grafica generada exitosamente.\n');
