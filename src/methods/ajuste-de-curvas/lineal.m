@@ -1,7 +1,7 @@
     % Ajuste de curvas lineal
     % cd /Users/esteban/git-repos/numerical-analisis-project && echo -e "guia/datos.csv\n6\n7" | ./run_matlab.sh src/methods/ajuste-de-curvas/lineal.m
 
-    function linearRegression()
+    function linearRegression(filename, col_x, col_y)
         format long;
 
         % Obtener el directorio del script y cambiar al directorio del proyecto
@@ -9,10 +9,6 @@
         projectPath = fullfile(scriptPath, '..', '..', '..');
         cd(projectPath);
         disp(['Directorio de trabajo: ' pwd]);
-
-        % Solicitar el nombre del archivo CSV
-        disp('Ingrese la ruta del archivo CSV (relativa al directorio del proyecto):');
-        filename = input('Archivo: ', 's');
 
         % Leer el archivo CSV
         try
@@ -29,12 +25,6 @@
             disp(['Error: ' ME.message]);
             error('No se pudo leer el archivo. Verifique la ruta y el formato.');
         end
-
-        % Solicitar las columnas a usar
-        disp('Ingrese el numero de columna para la variable independiente (x):');
-        col_x = input('Columna x: ');
-        disp('Ingrese el numero de columna para la variable dependiente (y):');
-        col_y = input('Columna y: ');
 
         % Extraer las coordenadas x e y de las columnas especificadas
         x = data(:, col_x);
@@ -65,21 +55,22 @@
         b = (sumY - m * sumX) / n;
 
         % Mostrar los coeficientes de la regresión lineal
-        disp('Coeficientes de la regresión lineal:');
+        disp('Coeficientes de la regresion lineal:');
         disp(['Pendiente (m): ' num2str(m)]);
         disp(['Intercepto (b): ' num2str(b)]);
-       fprintf('\033[32mLa función lineal ajustada es: y = %.4fx + %.4f\033[0m\n', m, b);
+        fprintf('\033[32mLa funcion lineal ajustada es: y = %.4fx + %.4f\033[0m\n', m, b);
 
-        % Graficar los datos y la línea de regresión lineal
-        fplot(@(x) m * x + b, [min(x) max(x)]);
+        % Graficar los datos y la linea de regresion lineal
+        scatter(x, y, 80, 'b', 'filled', 'MarkerEdgeColor', 'k', 'LineWidth', 1, 'MarkerFaceAlpha', 0.6);
         hold on;
-        scatter(x, y, 'r', 'filled');
-        title('Ajuste Lineal (Regresión Lineal)');
-        xlabel('x');
-        ylabel('y');
-        legend('Regresión Lineal', 'Datos', 'Location', 'Best');
+        x_plot = linspace(min(x), max(x), 100);
+        y_plot = m * x_plot + b;
+        plot(x_plot, y_plot, 'r-', 'LineWidth', 2);
+        xlabel('Variable Independiente (x)', 'FontSize', 12, 'FontWeight', 'bold');
+        ylabel('Variable Dependiente (y)', 'FontSize', 12, 'FontWeight', 'bold');
+        title('Regresion Lineal', 'FontSize', 14, 'FontWeight', 'bold');
+        legend('Datos', 'Regresion Lineal', 'Location', 'best');
         grid on;
         hold off;
     end
-
-    linearRegression()
+    linearRegression('/Users/esteban/git-repos/numerical-analisis-project/guia/datos.csv', 6, 7)
