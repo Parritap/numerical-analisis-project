@@ -1,0 +1,153 @@
+\subsection{Regresión cuadrática}
+
+La regresión cuadrática hace parte de lo que se conoce como regresiones polinomiales. Según \cite{Statistical-learning} la manera de representar un modelo  polinomial es como sigue:
+
+\[ y_i = \beta_0 + \beta_1 x_i + \beta_2 x_i^2 + \beta_3 x_i^3 + \ldots + \beta_d x_i^d + \epsilon_i \]
+
+La regresión polinómica permite modelar relaciones no lineales entre una variable dependiente \(y\) y una variable independiente \(x\) \citep{Statistical-learning}. Esto se logra añadiendo términos polinómicos (como \(x^2\), \(x^3\), etc.) a la ecuación.
+
+Así pues, la regresión cuadrática es tan solo una regresión polinómica de grado 2, es decir, incluye un término cuadrático \(x^2\).
+
+
+
+\subsubsection{Código matlab}
+
+\begin{lstlisting}
+% Ajuste de curvas cuadratico
+% NOTA!!!!!! -> Es mejor dar la ruta absoluta del CSV para evitar errores
+% cd /Users/esteban/git-repos/numerical-analisis-project && ./run_matlab.sh src/methods/ajuste-de-curvas/cuadratico.m
+
+function quadraticRegression(filename, col_x, col_y)
+% quadraticRegression - Realiza regresion cuadratica sobre datos de un archivo CSV
+%
+% Sintaxis: quadraticRegression(filename, col_x, col_y)
+%
+% Argumentos:
+%   filename - Ruta al archivo CSV (relativa a la raiz del proyecto)
+%   col_x    - Numero de columna para la variable independiente (x)
+%   col_y    - Numero de columna para la variable dependiente (y)
+%
+% Ejemplo:
+%   quadraticRegression('guia/datos.csv', 6, 7)
+format long;
+
+% Obtener el directorio del script y cambiar al directorio del proyecto
+scriptPath = fileparts(mfilename('fullpath'));
+projectPath = fullfile(scriptPath, '..', '..', '..');
+cd(projectPath);
+disp(['Directorio de trabajo: ' pwd]);
+
+% Leer el archivo CSV
+try
+opts = detectImportOptions(filename, 'Delimiter', ';', 'DecimalSeparator', ',');
+% Leer encabezados primero para mostrar columnas disponibles
+headers = readtable(filename, opts, 'ReadRowNames', false);
+disp('Archivo cargado exitosamente.');
+disp(['Columnas disponibles: ' strjoin(headers.Properties.VariableNames, ', ')]);
+
+% Obtener nombres de las columnas seleccionadas
+column_names = headers.Properties.VariableNames;
+x_label = strrep(column_names{col_x}, '_', ' ');
+y_label = strrep(column_names{col_y}, '_', ' ');
+
+% Ahora leer solo los datos numericos
+data = readmatrix(filename, 'Delimiter', ';', 'DecimalSeparator', ',');
+disp(['Numero de filas: ' num2str(size(data, 1))]);
+catch ME
+disp(['Error: ' ME.message]);
+error('No se pudo leer el archivo. Verifique la ruta y el formato.');
+end
+
+% Extraer las coordenadas x e y de las columnas especificadas
+x = data(:, col_x);
+y = data(:, col_y);
+
+% Verificar que los datos sean numericos
+if ~isnumeric(x) || ~isnumeric(y)
+error('Las columnas seleccionadas deben contener datos numericos.');
+end
+
+% Eliminar filas con valores NaN
+valid_idx = ~isnan(x) & ~isnan(y);
+x = x(valid_idx);
+y = y(valid_idx);
+
+% Numero de puntos de datos
+n = length(x);
+disp(['Numero de puntos validos: ' num2str(n)]);
+
+% Validar que haya al menos 3 puntos para la regresion cuadratica
+if n <= 2
+error('Se requieren al menos 3 puntos para la regresion cuadratica.');
+end
+
+% Realizar regresion cuadratica (ajustar un polinomio de grado 2)
+% polyfit retorna los coeficientes [a, b, c] para ax^2 + bx + c
+p = polyfit(x, y, 2);
+
+% Mostrar los coeficientes del polinomio cuadratico
+disp('Coeficientes del polinomio cuadratico:');
+disp(['a (coef. x^2): ' num2str(p(1))]);
+disp(['b (coef. x): ' num2str(p(2))]);
+disp(['c (intercepto): ' num2str(p(3))]);
+
+% Imprimir la ecuacion final en color verde usando codigos ANSI
+% Formato: f(x) = ax^2 + bx + c
+fprintf('\033[32mLa funcion cuadratica ajustada es: y = %.4fx^2 + %.4fx + %.4f\033[0m\n', p(1), p(2), p(3));
+
+% Generar puntos para graficar la curva ajustada
+x_fit = linspace(min(x), max(x), 100);  % Crear 100 puntos equiespaciados entre el x minimo y maximo
+y_fit = polyval(p, x_fit);               % Evaluar el polinomio en estos puntos
+
+% Graficar los puntos de datos originales como circulos rellenos
+scatter(x, y, 80, 'b', 'filled', 'MarkerEdgeColor', 'k', 'LineWidth', 1, 'MarkerFaceAlpha', 0.6);
+hold on;  % Mantener el grafico para agregar mas elementos
+
+% Graficar la curva cuadratica ajustada como una linea roja
+plot(x_fit, y_fit, 'r-', 'LineWidth', 2);
+
+% Agregar etiquetas y formato al grafico usando los nombres de las columnas
+xlabel(x_label, 'FontSize', 12, 'FontWeight', 'bold');
+ylabel(y_label, 'FontSize', 12, 'FontWeight', 'bold');
+title(['Regresion Cuadratica: ' y_label ' vs ' x_label], 'FontSize', 14, 'FontWeight', 'bold');
+legend('Datos', sprintf('y = %.4fx^2 + %.4fx + %.4f', p(1), p(2), p(3)), 'Location', 'best');
+grid on;   % Mostrar lineas de cuadricula
+hold off;  % Liberar el grafico
+end
+quadraticRegression('/Users/esteban/git-repos/numerical-analisis-project/guia/datos.csv', 6, 7)
+\end{lstlisting}
+
+
+
+\subsubsection{Haciendo uso del modelo con el dataset de prueba}
+
+Para ilustrar el modelo cuadrático, utilizaremos el dataset mostrado anteriomente en la figura \ref{fig:dataset}.
+
+
+\subsubsection{Modelo Cuadrático: Notas de algoritmos VS Hora de estudio}
+
+
+Haciendo uso del script de matlab elaborado para la presente sección, que el modelo produce la curva $-0.0003x^2 + 0.0400x + 3.1257$ como se puede observar en la figura \ref{fig:ajuste-cuadratico}.
+
+
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.5]{resources/ajuste-curvas/cuadratico_horas_notas.png}
+	\caption{Ejecución del ajuste cuadrático del modelo Horas de Estudio VS Notas de Algoritmos}
+	\label{fig:ajuste-cuadratico}
+\end{figure}
+
+
+La gráfica del modelo cuadrático se puede ver a continuación en la figura \ref{fig:plot:ajuste-cuadratico}.
+
+
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.4]{resources/ajuste-curvas/plot_cuadratico_horas_notas.png}
+	\caption{Gráfica del ajuste cuadrático por mínimos cuadrados del modelo Horas de Estudio VS Notas de Algoritmos}
+	\label{fig:plot:ajuste-cuadratico}
+\end{figure}
+
+
