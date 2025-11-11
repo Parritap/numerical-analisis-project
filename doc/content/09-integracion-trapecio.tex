@@ -1,0 +1,204 @@
+\section{Integración Numérica}
+
+\subsection{Método del Trapecio}
+
+\subsubsection{Fundamento Teórico}
+
+Según \cite{Stewart2012_Una}, la fórmula para aproximar la integral definida de una función $f$ en el intervalo $[a, b]$ usando el método del trapecio es la siguiente:
+
+\[
+	\int_a^b f(x) \, dx \approx T_n = \frac{\Delta x}{2} \left[ f(x_0) + 2f(x_1) + 2f(x_2) + \cdots + 2f(x_{n-1}) + f(x_n) \right]
+\]
+
+donde $\Delta x = (b - a)/n$ y $x_i = a + i \, \Delta x$.
+
+Para datos discretos, la regla del trapecio se aplica calculando el área de cada trapecio individual formado entre puntos consecutivos:
+
+\[
+	\text{Área} \approx \sum_{i=1}^{n-1} \frac{(x_{i+1} - x_i) \cdot (y_i + y_{i+1})}{2}
+\]
+
+donde cada término representa el área de un trapecio con bases $y_i$ y $y_{i+1}$, y altura $(x_{i+1} - x_i)$.
+
+\subsubsection{Implementación en MATLAB}
+
+La implementación del método del trapecio para datos discretos se realizó mediante la función \texttt{trapezoidalIntegration}, que lee datos desde un archivo CSV y calcula el área bajo la curva.
+
+\textbf{Algoritmo principal:}
+
+\begin{enumerate}
+	\item \textbf{Lectura de datos:} Se cargan los datos desde un archivo CSV utilizando \texttt{readmatrix}, especificando las columnas para las variables independiente (X) y dependiente (Y).
+
+	\item \textbf{Preprocesamiento:}
+	      \begin{itemize}
+		      \item Eliminación de valores NaN
+		      \item Ordenamiento de los datos por la variable X (requisito para integración)
+		      \item Validación de al menos 2 puntos
+	      \end{itemize}
+
+	\item \textbf{Cálculo de la integral:} Para cada par de puntos consecutivos $(x_i, y_i)$ y $(x_{i+1}, y_{i+1})$:
+	      \begin{itemize}
+		      \item Calcular el ancho del intervalo: $h = x_{i+1} - x_i$
+		      \item Calcular el área del trapecio: $A_i = h \cdot \frac{y_i + y_{i+1}}{2}$
+		      \item Acumular las áreas parciales
+	      \end{itemize}
+
+	\item \textbf{Visualización:} Generar una gráfica mostrando:
+	      \begin{itemize}
+		      \item Los trapecios sombreados bajo la curva
+		      \item La línea que conecta los puntos de datos
+		      \item Los puntos de datos marcados
+	      \end{itemize}
+\end{enumerate}
+
+\textbf{Código principal:}
+
+\begin{lstlisting}[style=Matlab-editor, caption={Implementación del método del trapecio}]
+% Aplicar la Regla del Trapecio
+% Formula: Integral ≈ Σ[(x[i+1] - x[i]) * (y[i] + y[i+1]) / 2]
+integral = 0.0;
+detalles = cell(n-1, 1);
+
+for i = 1:(n-1)
+    h = x_data(i+1) - x_data(i);  % Ancho del intervalo
+    area_parcial = h * (y_data(i) + y_data(i+1)) / 2;
+    integral = integral + area_parcial;
+    
+    % Guardar detalles de cada trapecio
+    detalles{i} = struct('intervalo', ...
+        sprintf('[%.2f, %.2f]', x_data(i), x_data(i+1)), ...
+        'h', h, 'area', area_parcial);
+end
+\end{lstlisting}
+
+\textbf{Función de visualización:}
+
+\begin{lstlisting}[style=Matlab-editor, caption={Visualización de trapecios}]
+% Graficar los datos y los trapecios
+figure('Position', [100, 100, 1200, 600]);
+hold on;
+
+% Dibujar los trapecios primero (para que esten detras)
+for i = 1:(n-1)
+    % Coordenadas de los vertices del trapecio
+    x_trap = [x_data(i), x_data(i+1), x_data(i+1), x_data(i)];
+    y_trap = [0, 0, y_data(i+1), y_data(i)];
+    
+    % Rellenar el trapecio con color cian y borde azul
+    fill(x_trap, y_trap, 'cyan', 'FaceAlpha', 0.3, ...
+         'EdgeColor', 'blue', 'LineWidth', 1);
+end
+
+% Graficar la linea que conecta los puntos
+plot(x_data, y_data, 'b-', 'LineWidth', 2, 'DisplayName', 'Datos');
+
+% Graficar los puntos de datos
+scatter(x_data, y_data, 80, 'b', 'filled', ...
+        'MarkerEdgeColor', 'k', 'LineWidth', 1, ...
+        'DisplayName', 'Puntos de datos');
+
+xlabel(x_label, 'FontSize', 12, 'FontWeight', 'bold');
+ylabel(y_label, 'FontSize', 12, 'FontWeight', 'bold');
+title(sprintf('Regla del Trapecio: %s vs %s\nArea = %.4f', ...
+              y_label, x_label, integral), ...
+      'FontSize', 14, 'FontWeight', 'bold');
+
+legend('Trapecios', 'Datos', 'Puntos de datos', 'Location', 'best');
+grid on;
+hold off;
+\end{lstlisting}
+
+\subsubsection{Resultados}
+
+Se aplicó el método del trapecio a los datos académicos, específicamente para calcular el rendimiento académico acumulado entre las variables \textbf{Horas de Estudio} (X) y \textbf{Nota en Algoritmos} (Y).
+
+\textbf{Parámetros de ejecución:}
+\begin{itemize}
+	\item \textbf{Variables:} Horas Estudio (X) vs Nota Algoritmos (Y)
+	\item \textbf{Rango de integración:} [5.00, 20.00]
+	\item \textbf{Número de intervalos (trapecios):} 29
+	\item \textbf{Número de puntos:} 30
+\end{itemize}
+
+\textbf{Resultado principal:}
+
+\begin{center}
+	\colorbox{green!20}{\textbf{Área bajo la curva (Integral): 53.850000}}
+\end{center}
+
+\textbf{Detalles de los primeros 5 trapecios:}
+
+\begin{center}
+	\begin{tabular}{|l|c|c|}
+		\hline
+		\textbf{Intervalo} & \textbf{Ancho (h)} & \textbf{Área Parcial} \\
+		\hline
+		[5.00, 5.00]       & 0.0000             & 0.000000              \\
+		[5.00, 5.00]       & 0.0000             & 0.000000              \\
+		[5.00, 5.00]       & 0.0000             & 0.000000              \\
+		[5.00, 6.00]       & 1.0000             & 3.150000              \\
+		[6.00, 7.00]       & 1.0000             & 3.150000              \\
+		\hline
+		\multicolumn{3}{|c|}{\textit{... (24 trapecios más)}}           \\
+		\hline
+	\end{tabular}
+\end{center}
+
+\textbf{Salida de consola:}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]{images/exec-trapezoidal.png}
+	\caption{Salida de ejecución del método del trapecio mostrando los detalles del cálculo}
+	\label{fig:exec-trapezoidal}
+\end{figure}
+
+\subsubsection{Visualización}
+
+La Figura \ref{fig:plot-trapezoidal} muestra la representación gráfica del método del trapecio aplicado a los datos. Los trapecios en color cian representan las áreas parciales que se suman para obtener el área total bajo la curva. La línea azul conecta los puntos de datos, y cada punto está marcado para facilitar la visualización.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]{images/plot-trapezoidal.png}
+	\caption{Visualización del método del trapecio aplicado a la relación entre Horas de Estudio y Nota en Algoritmos. Los trapecios sombreados muestran las áreas parciales que se suman para calcular el área total de 53.8500}
+	\label{fig:plot-trapezoidal}
+\end{figure}
+
+\subsubsection{Análisis e Interpretación}
+
+\begin{enumerate}
+	\item \textbf{Rendimiento académico acumulado:} El área de 53.85 representa una métrica del rendimiento académico total del grupo estudiado. Esta cifra integra tanto las horas de estudio como las notas obtenidas.
+
+	\item \textbf{Distribución de áreas:} Los primeros trapecios muestran algunos intervalos con ancho cero (puntos duplicados en X = 5.00), seguidos de trapecios regulares con ancho de 1 hora. Esto indica una concentración inicial de datos.
+
+	\item \textbf{Precisión del método:} El método del trapecio es exacto para funciones lineales por tramos. Para datos discretos como los utilizados, proporciona una aproximación razonable del área bajo la curva.
+
+	\item \textbf{Ventajas del método:}
+	      \begin{itemize}
+		      \item Fácil de implementar y entender
+		      \item Adecuado para datos discretos con espaciamiento irregular
+		      \item Proporciona resultados suficientemente precisos para análisis práctico
+		      \item Permite visualización intuitiva mediante gráficos
+	      \end{itemize}
+
+	\item \textbf{Consideraciones:}
+	      \begin{itemize}
+		      \item Los datos deben estar ordenados por la variable X
+		      \item El método asume interpolación lineal entre puntos consecutivos
+		      \item Para mayor precisión con funciones curvas, métodos como Simpson pueden ser más apropiados
+	      \end{itemize}
+\end{enumerate}
+
+\subsubsection{Comparación con Método de Simpson}
+
+El método del trapecio es generalmente menos preciso que el método de Simpson (que se verá en la siguiente sección) cuando la función tiene curvatura significativa. Sin embargo, para datos discretos o funciones aproximadamente lineales por tramos, el trapecio es suficiente y más simple de implementar.
+
+La diferencia clave:
+\begin{itemize}
+	\item \textbf{Trapecio:} Aproxima la función con líneas rectas (interpolación lineal)
+	\item \textbf{Simpson:} Aproxima la función con parábolas (interpolación cuadrática)
+\end{itemize}
+
+Para los datos académicos analizados, donde la relación entre variables es relativamente irregular, el método del trapecio proporciona una aproximación práctica y suficientemente precisa del área bajo la curva.
+
+
