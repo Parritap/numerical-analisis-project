@@ -287,6 +287,77 @@ donde \( n \) es par \( y \, \Delta x = (b - a)/n \).
     end
     
     simpsonIntegration('/Users/esteban/git-repos/numerical-analisis-project/guia/datos.csv', 6, 7)
-
-
 \end{lstlisting}
+
+\subsubsection{Resultados}
+
+Se aplicó el método de Simpson 1/3 a los mismos datos académicos utilizados en el método del trapecio, calculando el rendimiento académico acumulado entre las variables \textbf{Horas de Estudio} (X) y \textbf{Nota en Algoritmos} (Y).
+
+\textbf{Parámetros de ejecución:}
+\begin{itemize}
+	\item \textbf{Variables:} Horas Estudio (X) vs Nota Algoritmos (Y)
+	\item \textbf{Rango de integración:} [5.00, 20.00]
+	\item \textbf{Número de puntos (sin duplicados):} 27
+	\item \textbf{Número de parábolas:} 13
+	\item \textbf{Nota:} Se usó trapecio para el último intervalo debido a número par de puntos
+\end{itemize}
+
+\textbf{Resultados comparativos:}
+
+\begin{center}
+	\colorbox{purple!20}{\textbf{Área bajo la curva (Simpson): 58.000000}}
+\end{center}
+
+\begin{center}
+	\begin{tabular}{|l|c|}
+		\hline
+		\textbf{Método}                & \textbf{Área Calculada} \\
+		\hline
+		Simpson 1/3                    & 58.000000               \\
+		Trapecio                       & 53.850000               \\
+		\hline
+		\textbf{Diferencia}            & 4.150000                \\
+		\textbf{Diferencia porcentual} & 7.71\%                  \\
+		\hline
+	\end{tabular}
+\end{center}
+
+\textbf{Detalles de las primeras 5 parábolas:}
+
+\begin{center}
+	\begin{tabular}{|l|c|c|}
+		\hline
+		\textbf{Intervalo} & \textbf{Ancho (h)} & \textbf{Área Parcial} \\
+		\hline
+		{[5.00, 6.00]}     & 1.0000             & 4.500000              \\
+		{[6.00, 8.00]}     & 2.0000             & 7.333333              \\
+		{[8.00, 9.00]}     & 1.0000             & 4.066667              \\
+		{[9.00, 11.00]}    & 2.0000             & 8.333333              \\
+		{[11.00, 12.00]}   & 1.0000             & 3.900000              \\
+		\hline
+		\multicolumn{3}{|c|}{\textit{... (8 parábolas más)}}            \\
+		\hline
+	\end{tabular}
+\end{center}
+
+\textbf{Salida de consola:}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]{resources/integracion/exec-simpson.png}
+	\caption{Salida de ejecución del método de Simpson mostrando los detalles del cálculo y la comparación con el método del trapecio}
+	\label{fig:exec-simpson}
+\end{figure}
+
+\subsubsection{Visualización}
+
+La Figura \ref{fig:plot-simpson} muestra la representación gráfica del método de Simpson aplicado a los datos. Las áreas sombreadas en color naranja representan las parábolas interpolantes que se ajustan a cada grupo de tres puntos consecutivos. A diferencia del método del trapecio (que usa segmentos de línea recta), el método de Simpson utiliza parábolas cuadráticas que se adaptan mejor a la curvatura de los datos.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]{resources/integracion/plot-simpson.png}
+	\caption{Visualización del método de Simpson 1/3 aplicado a la relación entre Horas de Estudio y Nota en Algoritmos. Las parábolas naranjas muestran la interpolación cuadrática, mientras que las líneas azules angulares conectan los puntos de datos. El área total calculada es 58.0000}
+	\label{fig:plot-simpson}
+\end{figure}
+
+

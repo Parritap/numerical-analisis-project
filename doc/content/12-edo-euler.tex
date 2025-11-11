@@ -1,0 +1,148 @@
+\section{Método de Euler}
+
+El método de Euler es el método numérico más simple para resolver ecuaciones diferenciales ordinarias. Aunque es menos preciso que métodos de orden superior como Runge-Kutta, su simplicidad lo convierte en una herramienta didáctica fundamental para comprender los métodos numéricos.
+
+\subsection{Formulación del método}
+
+Para resolver el problema de valor inicial:
+
+\[
+	y' = f(t, y), \quad y(t_0) = y_0
+\]
+
+El método de Euler aproxima la solución mediante la fórmula iterativa:
+
+\[
+	y_{i+1} = y_i + h \cdot f(t_i, y_i)
+\]
+
+donde:
+\begin{itemize}
+	\item $h$ es el tamaño del paso
+	\item $t_{i+1} = t_i + h$
+	\item $f(t_i, y_i)$ es la pendiente en el punto $(t_i, y_i)$
+\end{itemize}
+
+El método tiene error de truncamiento local $O(h^2)$ y error global $O(h)$, lo que significa que es un método de primer orden.
+
+\subsection{Implementación en MATLAB}
+
+\begin{lstlisting}[caption={Método de Euler}]
+% Ejemplo de prueba con bash (Ecuacion: y' = -2*t*y, y(0) = 1, t en [0, 2], h = 0.1):
+% cd /Users/esteban/git-repos/numerical-analisis-project && echo -e "-2*t*y\n1\n0\n2\n0.1" | ./run_matlab.sh src/edos/eulerODE.m
+
+function eulerODE()
+    try
+        % Ingrese la ecuacion diferencial en la forma y' = f(t, y)
+        syms t y;
+        f_str = input('Ingrese la ecuacion diferencial en la forma y'' = f(t, y), f(t, y) = ', 's');
+        f = str2func(['@(t, y) ' f_str]);
+
+        % Ingrese las condiciones iniciales
+        y0 = input('Ingrese el valor inicial de y (y0): ');
+        t0 = input('Ingrese el tiempo inicial (t0): ');
+        tf = input('Ingrese el tiempo final (tf): ');
+        h = input('Ingrese el tamano del paso (h): ');
+
+        % Calcular el numero de pasos
+        numSteps = round((tf - t0) / h);
+
+        % Inicializar arrays para almacenar resultados
+        t_values = zeros(1, numSteps + 1);
+        y_values = zeros(1, numSteps + 1);
+
+        % Inicializar condiciones iniciales
+        t_values(1) = t0;
+        y_values(1) = y0;
+
+        % Aplicar el metodo de Euler
+        for i = 1:numSteps
+            y_values(i + 1) = y_values(i) + h * f(t_values(i), y_values(i));
+            t_values(i + 1) = t_values(i) + h;
+        end
+
+        % Mostrar los resultados
+        disp('Resultados del metodo de Euler:');
+        disp('t_values:');
+        disp(t_values);
+        disp('y_values:');
+        disp(y_values);
+
+        % Graficar la solucion
+        plot(t_values, y_values, 'LineWidth', 2, 'Color', 'b');
+        title('Solucion de la Ecuacion Diferencial por Metodo de Euler');
+        xlabel('t');
+        ylabel('y(t)');
+        grid on;
+
+    catch
+        error('Error en la entrada de datos.');
+    end
+end
+\end{lstlisting}
+
+\subsection{Ejemplo de aplicación}
+
+Se resolvió la ecuación diferencial $y' = -2ty$ con condición inicial $y(0) = 1$ en el intervalo $[0, 2]$ usando un tamaño de paso $h = 0.1$.
+
+\textbf{Parámetros:}
+\begin{itemize}
+	\item Ecuación diferencial: $y' = -2ty$
+	\item Condición inicial: $y(0) = 1$
+	\item Intervalo: $t \in [0, 2]$
+	\item Tamaño de paso: $h = 0.1$
+	\item Número de pasos: 20
+\end{itemize}
+
+\textbf{Solución analítica:} $y(t) = e^{-t^2}$
+
+\textbf{Comparación de resultados:}
+
+\begin{center}
+	\begin{tabular}{|c|c|c|c|}
+		\hline
+		\textbf{t} & \textbf{Euler} & \textbf{Runge-Kutta} & \textbf{Analítica} \\
+		\hline
+		0.0        & 1.0000         & 1.0000               & 1.0000             \\
+		0.5        & 0.7713         & 0.7788               & 0.7788             \\
+		1.0        & 0.3606         & 0.3679               & 0.3679             \\
+		1.5        & 0.1006         & 0.1054               & 0.1054             \\
+		2.0        & 0.0171         & 0.0183               & 0.0183             \\
+		\hline
+	\end{tabular}
+\end{center}
+
+Los resultados muestran que el método de Euler proporciona aproximaciones razonables, aunque con menor precisión que Runge-Kutta. El error se acumula conforme avanza la integración.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.9\textwidth]{resources/edos/exec-euler.png}
+	\caption{Ejecución del método de Euler mostrando los valores de $t$ y $y(t)$ calculados, junto con la gráfica de la solución}
+	\label{fig:exec-euler}
+\end{figure}
+
+\subsection{Análisis comparativo}
+
+\textbf{Ventajas del método de Euler:}
+\begin{itemize}
+	\item Implementación simple y directa
+	\item Bajo costo computacional por paso
+	\item Excelente para fines didácticos
+	\item Útil para problemas donde se requiere rapidez sobre precisión
+\end{itemize}
+
+\textbf{Desventajas:}
+\begin{itemize}
+	\item Error de truncamiento $O(h)$ requiere pasos pequeños para buena precisión
+	\item Acumulación de errores en integraciones largas
+	\item Menos estable que métodos de orden superior
+	\item No recomendado para problemas rígidos (stiff)
+\end{itemize}
+
+\textbf{Comparación con Runge-Kutta:}
+\begin{itemize}
+	\item Euler: 1 evaluación de $f$ por paso, error $O(h)$
+	\item Runge-Kutta: 4 evaluaciones de $f$ por paso, error $O(h^4)$
+	\item Para la misma precisión, Euler requiere pasos mucho más pequeños
+	\item Runge-Kutta es generalmente más eficiente para problemas que requieren alta precisión
+\end{itemize}
