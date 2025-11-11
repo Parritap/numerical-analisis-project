@@ -1,0 +1,292 @@
+\subsection{Integración por el Método de Simpson}
+
+Según \cite{Stewart2012_Una}, la fórmula para aproximar la integral definida de una función $f$ en el intervalo $[a, b]$ usando el método de Simpson es la siguiente:
+
+
+\[
+	\int_a^b f(x) \, dx \approx S_n = \frac{\Delta x}{3} \left[ f(x_0) + 4f(x_1) + 2f(x_2) + 4f(x_3) + \cdots + 2f(x_{n-2}) + 4f(x_{n-1}) + f(x_n) \right]
+\]
+
+donde \( n \) es par \( y \, \Delta x = (b - a)/n \).
+
+\vspace{0.5cm}
+\subsubsection{Implementación en MATLAB}
+
+\begin{lstlisting}
+% cd /Users/esteban/git-repos/numerical-analisis-project && ./run_matlab.sh src/methods/integration/simpson.m
+
+    function simpsonIntegration(filename, col_x, col_y)
+        % simpsonIntegration - Realiza integracion numerica usando la Regla de Simpson 1/3 sobre datos de un archivo CSV
+        %
+        % Sintaxis: simpsonIntegration(filename, col_x, col_y)
+        %
+        % Argumentos:
+        %   filename - Ruta al archivo CSV (relativa a la raiz del proyecto)
+        %   col_x    - Numero de columna para la variable independiente (x)
+        %   col_y    - Numero de columna para la variable dependiente (y)
+        %
+        % Ejemplo:
+        %   simpsonIntegration('guia/datos.csv', 6, 7)
+        format long;
+
+        % Obtener el directorio del script y cambiar al directorio del proyecto
+        scriptPath = fileparts(mfilename('fullpath'));
+        projectPath = fullfile(scriptPath, '..', '..', '..');
+        cd(projectPath);
+        disp(['Directorio de trabajo: ' pwd]);
+
+        % Leer el archivo CSV
+        try
+            opts = detectImportOptions(filename, 'Delimiter', ';', 'DecimalSeparator', ',');
+            % Leer encabezados primero para mostrar columnas disponibles
+            headers = readtable(filename, opts, 'ReadRowNames', false);
+            disp('Archivo cargado exitosamente.');
+            disp(['Columnas disponibles: ' strjoin(headers.Properties.VariableNames, ', ')]);
+            
+            % Obtener nombres de las columnas seleccionadas
+            column_names = headers.Properties.VariableNames;
+            x_label = strrep(column_names{col_x}, '_', ' ');
+            y_label = strrep(column_names{col_y}, '_', ' ');
+            
+            % Ahora leer solo los datos numericos
+            data = readmatrix(filename, 'Delimiter', ';', 'DecimalSeparator', ',');
+            disp(['Numero de filas: ' num2str(size(data, 1))]);
+        catch ME
+            disp(['Error: ' ME.message]);
+            error('No se pudo leer el archivo. Verifique la ruta y el formato.');
+        end
+
+        % Extraer las coordenadas x e y de las columnas especificadas
+        x_data = data(:, col_x);
+        y_data = data(:, col_y);
+        
+        % Verificar que los datos sean numericos
+        if ~isnumeric(x_data) || ~isnumeric(y_data)
+            error('Las columnas seleccionadas deben contener datos numericos.');
+        end
+        
+        % Eliminar filas con valores NaN
+        valid_idx = ~isnan(x_data) & ~isnan(y_data);
+        x_data = x_data(valid_idx);
+        y_data = y_data(valid_idx);
+
+        % Ordenar los datos por x (requerido para integracion)
+        [x_data, sort_idx] = sort(x_data);
+        y_data = y_data(sort_idx);
+        
+        % Eliminar puntos duplicados en X (mantener el primero)
+        [x_data, unique_idx] = unique(x_data, 'stable');
+        y_data = y_data(unique_idx);
+
+        % Numero de puntos
+        n = length(x_data);
+        disp(['Numero de puntos validos (sin duplicados en X): ' num2str(n)]);
+        
+        % Validar que haya al menos 3 puntos
+        if n < 3
+            error('Se requieren al menos 3 puntos para la regla de Simpson.');
+        end
+        
+        % Simpson requiere numero impar de puntos (numero par de intervalos)
+        % Si hay numero par de puntos, usar Simpson hasta n-1 y trapecio para el ultimo intervalo
+        use_trapezoid_last = false;
+        if mod(n, 2) == 0
+            warning('Numero par de puntos detectado. Se usara Simpson para los primeros %d puntos y Trapecio para el ultimo intervalo.', n-1);
+            use_trapezoid_last = true;
+            n_simpson = n - 1;
+        else
+            n_simpson = n;
+        end
+        
+        % Verificar si los intervalos son uniformes
+        h_values = diff(x_data(1:n_simpson));
+        h_mean = mean(h_values);
+        h_uniform = all(abs(h_values - h_mean) < 1e-6);
+        
+        if h_uniform
+            % Aplicar Simpson clasico (intervalos uniformes)
+            h = x_data(2) - x_data(1);
+            
+            % Formula de Simpson 1/3: I = (h/3) * [y0 + 4*y1 + 2*y2 + 4*y3 + ... + 4*y(n-1) + yn]
+            integral = y_data(1) + y_data(n_simpson);
+            
+            % Sumar terminos con coeficiente 4 (indices impares)
+            for i = 2:2:n_simpson-1
+                integral = integral + 4 * y_data(i);
+            end
+            
+            % Sumar terminos con coeficiente 2 (indices pares)
+            for i = 3:2:n_simpson-2
+                integral = integral + 2 * y_data(i);
+            end
+            
+            integral = integral * h / 3;
+            
+            % Guardar detalles de las parabolas
+            num_parabolas = (n_simpson - 1) / 2;
+            detalles = cell(num_parabolas, 1);
+            
+            for i = 1:num_parabolas
+                idx_start = 2*i - 1;
+                idx_mid = 2*i;
+                idx_end = 2*i + 1;
+                
+                area_parabola = (h/3) * (y_data(idx_start) + 4*y_data(idx_mid) + y_data(idx_end));
+                
+                detalles{i} = struct('intervalo', sprintf('[%.2f, %.2f]', x_data(idx_start), x_data(idx_end)), ...
+                                     'h', 2*h, ...
+                                     'area', area_parabola);
+            end
+            
+        else
+            % Aplicar Simpson compuesto (intervalos no uniformes)
+            integral = 0.0;
+            num_parabolas = floor((n_simpson - 1) / 2);
+            detalles = cell(num_parabolas, 1);
+            
+            for i = 1:num_parabolas
+                idx_start = 2*i - 1;
+                idx_mid = 2*i;
+                idx_end = 2*i + 1;
+                
+                h1 = x_data(idx_mid) - x_data(idx_start);
+                h2 = x_data(idx_end) - x_data(idx_mid);
+                h_total = x_data(idx_end) - x_data(idx_start);
+                
+                % Formula de Simpson para intervalos no uniformes
+                area_parabola = (h_total/6) * (y_data(idx_start) + 4*y_data(idx_mid) + y_data(idx_end));
+                integral = integral + area_parabola;
+                
+                detalles{i} = struct('intervalo', sprintf('[%.2f, %.2f]', x_data(idx_start), x_data(idx_end)), ...
+                                     'h', h_total, ...
+                                     'area', area_parabola);
+            end
+        end
+        
+        % Si se necesita trapecio para el ultimo intervalo
+        area_trapecio_final = 0;
+        if use_trapezoid_last
+            h_last = x_data(n) - x_data(n-1);
+            area_trapecio_final = h_last * (y_data(n-1) + y_data(n)) / 2;
+            integral = integral + area_trapecio_final;
+        end
+        
+        % Calcular tambien con trapecio para comparacion
+        integral_trapecio = 0.0;
+        for i = 1:(n-1)
+            h = x_data(i+1) - x_data(i);
+            integral_trapecio = integral_trapecio + h * (y_data(i) + y_data(i+1)) / 2;
+        end
+        
+        % Mostrar resultados
+        fprintf('\n');
+        fprintf('========================================================================\n');
+        fprintf('INTEGRACION NUMERICA: Regla de Simpson 1/3\n');
+        fprintf('========================================================================\n');
+        fprintf('\n');
+        fprintf('Variables: %s (X) vs %s (Y)\n', x_label, y_label);
+        fprintf('Rango de integracion: [%.2f, %.2f]\n', x_data(1), x_data(end));
+        fprintf('Numero de puntos: %d\n', n);
+        fprintf('Numero de parabolas: %d\n', length(detalles));
+        if use_trapezoid_last
+            fprintf('Nota: Se uso trapecio para el ultimo intervalo (punto extra)\n');
+        end
+        fprintf('\n');
+        fprintf('\033[35mArea bajo la curva (Simpson): %.6f\033[0m\n', integral);
+        fprintf('Area bajo la curva (Trapecio): %.6f\n', integral_trapecio);
+        fprintf('Diferencia: %.6f (%.2f%%)\n', abs(integral - integral_trapecio), ...
+                abs(integral - integral_trapecio) / integral_trapecio * 100);
+        fprintf('\n');
+        
+        % Mostrar detalles de las primeras 5 parabolas
+        fprintf('Detalles de las primeras 5 parabolas:\n');
+        fprintf('------------------------------------------------------------------------\n');
+        fprintf('%-20s %-15s %-15s\n', 'Intervalo', 'Ancho (h)', 'Area Parcial');
+        fprintf('------------------------------------------------------------------------\n');
+        
+        num_mostrar = min(5, length(detalles));
+        for i = 1:num_mostrar
+            det = detalles{i};
+            fprintf('%-20s %-15.4f %-15.6f\n', det.intervalo, det.h, det.area);
+        end
+        
+        if length(detalles) > 5
+            fprintf('... (%d parabolas mas)\n', length(detalles) - 5);
+        end
+        
+        if use_trapezoid_last
+            fprintf('\nUltimo intervalo (Trapecio):\n');
+            fprintf('[%.2f, %.2f]       %.4f          %.6f\n', ...
+                    x_data(n-1), x_data(n), x_data(n) - x_data(n-1), area_trapecio_final);
+        end
+        
+        fprintf('========================================================================\n');
+        
+        % Graficar los datos con parabolas
+        figure('Position', [100, 100, 1200, 600]);
+        
+        hold on;
+        
+        % Dibujar las parabolas de Simpson
+        for i = 1:length(detalles)
+            idx_start = 2*i - 1;
+            idx_mid = 2*i;
+            idx_end = 2*i + 1;
+            
+            % Crear puntos para la parabola interpolante
+            x_parabola = linspace(x_data(idx_start), x_data(idx_end), 50);
+            
+            % Ajustar una parabola a los 3 puntos usando polyfit
+            p = polyfit([x_data(idx_start), x_data(idx_mid), x_data(idx_end)], ...
+                        [y_data(idx_start), y_data(idx_mid), y_data(idx_end)], 2);
+            y_parabola = polyval(p, x_parabola);
+            
+            % Rellenar el area bajo la parabola
+            x_fill = [x_parabola, fliplr(x_parabola)];
+            y_fill = [y_parabola, zeros(size(y_parabola))];
+            fill(x_fill, y_fill, [1 0.5 0], 'FaceAlpha', 0.3, 'EdgeColor', [1 0.3 0], 'LineWidth', 1.5);
+        end
+        
+        % Si hay trapecio final, dibujarlo
+        if use_trapezoid_last
+            x_trap = [x_data(n-1), x_data(n), x_data(n), x_data(n-1)];
+            y_trap = [0, 0, y_data(n), y_data(n-1)];
+            fill(x_trap, y_trap, 'cyan', 'FaceAlpha', 0.3, 'EdgeColor', 'blue', 'LineWidth', 1);
+        end
+        
+        % Graficar la linea que conecta los puntos
+        plot(x_data, y_data, 'b-', 'LineWidth', 2, 'DisplayName', 'Datos');
+        
+        % Graficar los puntos de datos
+        scatter(x_data, y_data, 80, 'b', 'filled', 'MarkerEdgeColor', 'k', 'LineWidth', 1, 'DisplayName', 'Puntos de datos');
+        
+        % Etiquetas y titulo
+        xlabel(x_label, 'FontSize', 12, 'FontWeight', 'bold');
+        ylabel(y_label, 'FontSize', 12, 'FontWeight', 'bold');
+        title(sprintf('Regla de Simpson 1/3: %s vs %s\nArea = %.4f', y_label, x_label, integral), ...
+              'FontSize', 14, 'FontWeight', 'bold');
+        
+        % Leyenda
+        if use_trapezoid_last
+            legend('Parabolas (Simpson)', 'Trapecio (ultimo intervalo)', 'Datos', 'Puntos de datos', 'Location', 'best');
+        else
+            legend('Parabolas (Simpson)', 'Datos', 'Puntos de datos', 'Location', 'best');
+        end
+        
+        grid on;
+        hold off;
+        
+        % Ajustar limites del eje Y
+        y_min = min(0, min(y_data));
+        y_max = max(y_data);
+        y_range = y_max - y_min;
+        ylim([y_min - 0.05*y_range, y_max + 0.1*y_range]);
+        
+        disp(' ');
+        disp('Grafica generada exitosamente.');
+    end
+    
+    simpsonIntegration('/Users/esteban/git-repos/numerical-analisis-project/guia/datos.csv', 6, 7)
+
+
+\end{lstlisting}
