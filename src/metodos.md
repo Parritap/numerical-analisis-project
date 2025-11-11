@@ -1,10 +1,4 @@
 
-
-## Interpolación
-- Lagrange 
-- Diferencias divididas con Newton
-
-
 ## Integración numérica de Datos regulares
 - Regla del trapecio
 - Regla de simpson
