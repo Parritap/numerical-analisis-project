@@ -1,0 +1,18 @@
+\subsection{Interpolación de Newton}
+
+
+Según \cite{newtons-interpolation} la fórmula de los Polinomios Interpolantes de Newton para ajustar un polinomio de grado $n$ a través de $n+1$ puntos de datos $(x_i, y_i)$ con $1 \leq i \leq n+1$ es comos sigue:
+
+\[
+	f_n(x) = b_1 + b_2(x-x_1) + b_3(x-x_1)(x-x_2) + \cdots + b_{n+1}(x-x_1)(x-x_2)\cdots(x-x_n)
+\]
+
+donde los coeficientes $b_i$ se definen recursivamente usando las diferencias divididas de la siguiente manera:
+
+\begin{align*}
+	b_1     & = y_1                                                                                                                               \\
+	b_2     & = [y_1, y_2] = \frac{y_2 - y_1}{x_2 - x_1}                                                                                          \\
+	b_3     & = [y_1, y_2, y_3] = \frac{[y_2, y_3] - [y_1, y_2]}{x_3 - x_1} = \frac{\frac{y_3-y_2}{x_3-x_2} - \frac{y_2-y_1}{x_2-x_1}}{x_3 - x_1} \\
+	        & \vdots                                                                                                                              \\
+	b_{n+1} & = [y_1, y_2, y_3, \cdots, y_{n+1}] = \frac{[y_2, y_3, \cdots, y_{n+1}] - [y_1, y_2, y_3, \cdots, y_n]}{x_{n+1} - x_1}
+\end{align*}
